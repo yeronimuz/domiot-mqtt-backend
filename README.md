@@ -1,5 +1,5 @@
-# lnb-domotics-backend
-LNB domotics measurements to database agent.
+# lds-mqtt-backend
+LNB domotics measurements to database service.
 ## Starting the service
 <code>
   java -jar lnb-domotics-backend-<version>.jar application.yml
