@@ -1,4 +1,4 @@
-package com.lankheet.domotics.backend;
+package com.lankheet.iot.lds;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,11 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import com.lankheet.iot.lds.config.DatabaseConfig;
+import com.lankheet.iot.mqtthandler.dao.IBackendDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.lankheet.domotics.backend.config.DatabaseConfig;
-import com.lankheet.domotics.backend.dao.IBackendDao;
 import com.lankheet.iot.datatypes.entities.Measurement;
 import com.lankheet.iot.datatypes.entities.Sensor;
 

@@ -1,4 +1,4 @@
-package com.lankheet.domotics.backend.config;
+package com.lankheet.iot.lds.config;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,6 +71,8 @@ public class BackendServiceConfig {
 
         BackendServiceConfig backendServiceConfig = (BackendServiceConfig) yaml.load(inputStream);
         return backendServiceConfig;
+
+        // TODO: JWT auth stuff in https://github.com/wildfly/quickstart/tree/main/jaxrs-jwt
 
     }
 }

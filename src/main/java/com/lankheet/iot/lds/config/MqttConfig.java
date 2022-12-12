@@ -1,4 +1,4 @@
-package com.lankheet.domotics.backend.config;
+package com.lankheet.iot.lds.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

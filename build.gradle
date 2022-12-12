@@ -1,23 +1,15 @@
-plugins {
-   id "com.github.johnrengelman.shadow" version "4.0.1"
-   id 'net.nemerosa.versioning' version '2.6.1'
-}
-
 apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'application'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
+apply plugin: 'war'
 
 version '0.4'
 
 ext {
-    baseName = 'lnb-domotics-backend'
-    classifier = 'RC'   
-    dataTypesVersion = '0.5-SNAPSHOT'
-    junitVersion = '4.+'
-    jmockitVersion = '1.35'
-    jacksonVersion = '2.8.1'
+    baseName = 'lds-iot-backend'
+    classifier = 'SNAPSHOT'
+    dataTypesVersion = '0.5.1-SNAPSHOT'
+    jacksonVersion = '2.14.0'
     hibernateVersion = '5.2.10.Final'
 }
 
@@ -26,20 +18,6 @@ repositories {
     mavenCentral()
 }
 
-shadowJar {
-    mergeServiceFiles()
-    mainClassName = 'com.lankheet.domotics.backend.BackendService'
-    baseName = project.ext.baseName
-    classifier = project.ext.classifier
-    version =  version
-}
-
-eclipse {
-    classpath {
-        downloadJavadoc = true
-        downloadSources = true
-    }
-}
 
 jacoco {
     toolVersion = "0.7.6.201602180812"
@@ -49,8 +27,8 @@ jacoco {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId 'com.lankheet.domotics'
-            artifactId 'lnb-domotics-backend'
+            groupId 'com.lankheet.iot'
+            artifactId 'lds-iot-backend'
             version version
 
             from components.java
@@ -58,38 +36,21 @@ publishing {
     }
 }
 
-jar {
-   manifest {
-       attributes (
-        'Implementation-Title': 'Domotics backend',
-        'Implementation-Version': version,
-        'Implementation-Classifier': project.ext.classifier,
-        'Built-By'       : System.properties['user.name'],
-        'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
-        'Build-Revision' : versioning.info.commit,
-        'Created-By'     : "Gradle ${gradle.gradleVersion}",
-        'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
-        'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
-        )
-   }
-}
-
-
 dependencies {
-    compile group: 'com.lankheet.iot', name: 'datatypes', version: dataTypesVersion
-    compile group: 'org.yaml', name: 'snakeyaml', version: '1.21'
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
-    compile group: 'com.fasterxml.jackson.core', name:'jackson-core', version: jacksonVersion
-    compile group: 'com.fasterxml.jackson.core', name:'jackson-databind', version: jacksonVersion
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonVersion
-    compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.44'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
-      
-    testCompile 'info.cukes:cucumber-java:1.2.4'
-    testCompile 'info.cukes:cucumber-junit:1.2.4'
-    testCompile group: 'junit', name: 'junit', version: junitVersion
-    testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
-    testCompile group: 'org.jmockit', name: 'jmockit', version: jmockitVersion  
+    implementation group: 'com.lankheet.iot', name: 'datatypes', version: '0.6.0-SNAPSHOT'
+
+
+    implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.9'
+    implementation group: 'com.lankheet.lds', name: 'iot-api', version: '1.0.1-SNAPSHOT'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.31'
+
+    compileOnly 'jakarta.platform:jakarta.jakartaee-api:9.1.0'
+    compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.2'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.11.2'
+    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.11.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.9.0'
+    testImplementation 'org.hamcrest:hamcrest-junit:2.0.0.0'
+
 }

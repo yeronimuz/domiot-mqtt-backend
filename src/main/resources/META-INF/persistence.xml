@@ -6,26 +6,26 @@
         <description>
             Persistence unit for the measurements storage
         </description>
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+<!--        <provider>jakarta.persistence.Persistence</provider>-->
         
         <class>com.lankheet.iot.datatypes.entities.Measurement</class>
         <class>com.lankheet.iot.datatypes.entities.MeasurementType</class>
         <class>com.lankheet.iot.datatypes.entities.Sensor</class>
         <class>com.lankheet.iot.datatypes.entities.SensorType</class>
         <class>com.lankheet.iot.datatypes.entities.DomoticsUser</class>
-        <class>com.lankheet.iot.datatypes.entities.Location</class>
+        <class>com.lankheet.iot.datatypes.entities.Site</class>
         <class>com.lankheet.iot.datatypes.entities.Actuator</class>
-        <class>com.lankheet.iot.datatypes.entities.DomoticsRole</class>
+        <class>com.lankheet.iot.datatypes.entities.Permission</class>
 
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/domotics" />
-            <property name="javax.persistence.jdbc.user" value="lnb" />
-            <property name="javax.persistence.jdbc.password" value="lnb" />
-
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
-            <property name="hibernate.show_sql" value="true" />
-            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/domotics" />
+            <property name="jakarta.persistence.jdbc.user" value="lds" />
+            <property name="jakarta.persistence.jdbc.password" value="lds-iot" />
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+<!--            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />-->
+<!--            <property name="hibernate.show_sql" value="true" />-->
+<!--            <property name="hibernate.hbm2ddl.auto" value="update" />-->
         </properties>
 
  	</persistence-unit>

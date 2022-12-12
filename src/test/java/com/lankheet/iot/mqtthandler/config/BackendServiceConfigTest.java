@@ -1,4 +1,4 @@
-package com.lankheet.domotics.backend.config;
+package com.lankheet.iot.mqtthandler.config;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -6,6 +6,9 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
+import com.lankheet.iot.lds.config.BackendServiceConfig;
+import com.lankheet.iot.lds.config.DatabaseConfig;
+import com.lankheet.iot.lds.config.MqttConfig;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
