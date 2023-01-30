@@ -4,24 +4,26 @@
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 	<persistence-unit name="meas-pu" transaction-type="RESOURCE_LOCAL">
         <description>
-            Persistence unit for the measurements storage
+            Persistence unit for the domiot system
         </description>
-<!--        <provider>jakarta.persistence.Persistence</provider>-->
+        <jta-data-source>jdbc/local-mysql</jta-data-source>
         
-        <class>com.lankheet.iot.datatypes.entities.Measurement</class>
+        <class>com.lankheet.iot.datatypes.entities.MeasurementEntity</class>
         <class>com.lankheet.iot.datatypes.entities.MeasurementType</class>
-        <class>com.lankheet.iot.datatypes.entities.Sensor</class>
+        <class>com.lankheet.iot.datatypes.entities.SensorEntity</class>
         <class>com.lankheet.iot.datatypes.entities.SensorType</class>
-        <class>com.lankheet.iot.datatypes.entities.DomoticsUser</class>
-        <class>com.lankheet.iot.datatypes.entities.Site</class>
-        <class>com.lankheet.iot.datatypes.entities.Actuator</class>
+        <class>com.lankheet.iot.datatypes.entities.DomoticsUserEntity</class>
+        <class>com.lankheet.iot.datatypes.entities.SiteEntity</class>
+        <class>com.lankheet.iot.datatypes.entities.ActuatorEntity</class>
         <class>com.lankheet.iot.datatypes.entities.Permission</class>
+        <class>com.lankheet.iot.datatypes.entities.PowermeterConfigEntity</class>
+        <class>com.lankheet.iot.datatypes.entities.MqttConfigEntity</class>
+        <class>com.lankheet.iot.datatypes.entities.SerialConfigEntity</class>
+    <class>org.domiot.backend.entities.MqttTopicEntity</class>
 
-        <properties>
+    <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/domotics" />
-            <property name="jakarta.persistence.jdbc.user" value="lds" />
-            <property name="jakarta.persistence.jdbc.password" value="lds-iot" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/domiot" />
             <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
 <!--            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />-->
 <!--            <property name="hibernate.show_sql" value="true" />-->

@@ -15,4 +15,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'lds-iot-backend'
+rootProject.name = 'domiot-backend'

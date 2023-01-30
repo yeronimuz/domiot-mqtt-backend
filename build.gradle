@@ -3,32 +3,21 @@ apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 apply plugin: 'war'
 
-version '0.4'
-
-ext {
-    baseName = 'lds-iot-backend'
-    classifier = 'SNAPSHOT'
-    dataTypesVersion = '0.5.1-SNAPSHOT'
-    jacksonVersion = '2.14.0'
-    hibernateVersion = '5.2.10.Final'
-}
-
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
-
 jacoco {
-    toolVersion = "0.7.6.201602180812"
+    toolVersion = "0.8.8"
     reportsDir = file("$buildDir/customJacocoReportDir")
 }
 
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId 'com.lankheet.iot'
-            artifactId 'lds-iot-backend'
+            groupId project.group
+            artifactId project.name
             version version
 
             from components.java
@@ -37,15 +26,18 @@ publishing {
 }
 
 dependencies {
+    // TODO: Remove
     implementation group: 'com.lankheet.iot', name: 'datatypes', version: '0.6.0-SNAPSHOT'
 
 
     implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.9'
-    implementation group: 'com.lankheet.lds', name: 'iot-api', version: '1.0.1-SNAPSHOT'
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.31'
+    implementation group: 'org.lankheet.domiot', name: 'domiot-rest-api', version: '1.0.1-SNAPSHOT'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.3.Final'
 
-    compileOnly 'jakarta.platform:jakarta.jakartaee-api:9.1.0'
+    compileOnly 'jakarta.platform:jakarta.jakartaee-web-api:9.1.0'
     compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
+    compileOnly 'org.hibernate:hibernate-core:6.1.6.Final'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.2'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.11.2'
