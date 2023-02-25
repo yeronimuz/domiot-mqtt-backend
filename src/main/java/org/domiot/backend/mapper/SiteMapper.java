@@ -1,6 +1,6 @@
 package org.domiot.backend.mapper;
 
-import org.domiot.backend.entities.SiteEntity;
+import org.lankheet.domiot.entities.SiteEntity;
 import org.lankheet.domiot.model.Site;
 import org.mapstruct.Mapper;
 

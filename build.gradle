@@ -13,36 +13,57 @@ jacoco {
     reportsDir = file("$buildDir/customJacocoReportDir")
 }
 
+war {
+    baseName = rootProject.name
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId project.group
-            artifactId project.name
-            version version
+            groupId findProperty('group')
+            artifactId findProperty('name')
+            version findProperty('version')
 
-            from components.java
+            from components.web
         }
     }
 }
 
 dependencies {
-    // TODO: Remove
-    implementation group: 'com.lankheet.iot', name: 'datatypes', version: '0.6.0-SNAPSHOT'
-
-
+    implementation group: 'org.lankheet.domiot', name: 'domiot-datatypes', version: '0.7.0-SNAPSHOT'
     implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.9'
-    implementation group: 'org.lankheet.domiot', name: 'domiot-rest-api', version: '1.0.1-SNAPSHOT'
+    implementation group: 'org.lankheet.domiot', name: 'domiot-rest-api', version: '1.1.0-SNAPSHOT'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
     implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.3.Final'
 
     compileOnly 'jakarta.platform:jakarta.jakartaee-web-api:9.1.0'
     compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
-    compileOnly 'org.hibernate:hibernate-core:6.1.6.Final'
+    compileOnly 'org.hibernate:hibernate-core:6.1.7.Final'
 
+    testImplementation 'jakarta.platform:jakarta.jakartaee-web-api:9.1.0'
+    testImplementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.2'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.11.2'
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.11.2'
     testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.9.0'
+    // Highest Derby version with EmbeddedDriver
+    testImplementation group: 'org.apache.derby', name: 'derby', version: '10.14.2.0'
+    testImplementation 'org.hibernate:hibernate-core:6.1.7.Final'
+    testImplementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.6.10.Final'
     testImplementation 'org.hamcrest:hamcrest-junit:2.0.0.0'
-
+    testImplementation group: 'org.jboss.arquillian.junit', name: 'arquillian-junit-container', version: '1.6.0.Final'
+    testImplementation group: 'org.jboss.arquillian', name: 'arquillian-bom', version: '1.6.0.Final'
 }
+
+test{
+    // Workaround for using Gradle as executor of your unit tests
+    useJUnitPlatform()
+    ignoreFailures = !project.hasProperty('release')
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+

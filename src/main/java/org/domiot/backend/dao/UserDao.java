@@ -1,17 +1,15 @@
 package org.domiot.backend.dao;
 
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import org.domiot.backend.entities.UserEntity;
-import org.lankheet.iot.model.User;
+import org.lankheet.domiot.entities.UserEntity;
 
 /**
- * DAO for {@link org.domiot.backend.entities.UserEntity}
+ * DAO for {@link org.lankheet.domiot.entities.UserEntity}
  */
 @Transactional
 public class UserDao implements Dao<UserEntity> {
@@ -27,8 +25,7 @@ public class UserDao implements Dao<UserEntity> {
   @Override
   public List<UserEntity> getAll() {
     Query query = entityManager.createQuery("SELECT e FROM UserEntity e");
-    List resultList = query.getResultList();
-    return resultList;
+    return query.getResultList();
   }
 
   @Override

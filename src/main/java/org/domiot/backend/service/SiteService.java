@@ -21,11 +21,12 @@ public class SiteService {
   private Site saveNewSite(Site site)
       throws SiteException {
     // Validate that there is at least one user with admin rights
-    if (site.getUsers() == null && !siteHasAdminUser(site)) {
+    if (site.getUsers() == null || !siteHasAdminUser(site)) {
       throw new SiteException(Errors.ADMIN_USER_MISSING);
     }
 
     if (siteDao.get(site.getSiteId()).isPresent()) {
+      // TODO: Or do we just overwrite the Site?
       throw new SiteException(Errors.SITE_EXISTS);
     }
 

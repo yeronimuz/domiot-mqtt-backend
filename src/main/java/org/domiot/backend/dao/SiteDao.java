@@ -1,13 +1,11 @@
 package org.domiot.backend.dao;
 
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import java.util.List;
 import java.util.Optional;
-import org.domiot.backend.entities.SiteEntity;
-import org.lankheet.iot.model.Site;
+import org.lankheet.domiot.entities.SiteEntity;
 
 public class SiteDao implements Dao<SiteEntity> {
 
@@ -27,6 +25,8 @@ public class SiteDao implements Dao<SiteEntity> {
 
   @Override
   public SiteEntity save(SiteEntity siteEntity) {
+    // Save users separately
+    siteEntity.getUserList().forEach( userEntity -> entityManager.persist(userEntity));
     entityManager.persist(siteEntity);
     return siteEntity;
   }

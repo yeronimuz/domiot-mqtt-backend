@@ -1,6 +1,6 @@
 package org.domiot.backend.mapper;
 
-import org.domiot.backend.entities.UserEntity;
+import org.lankheet.domiot.entities.UserEntity;
 import org.lankheet.domiot.model.User;
 import org.mapstruct.Mapper;
 
