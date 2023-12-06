@@ -1,0 +1,15 @@
+services:
+  mysql:
+    image: mariadb:10.2
+    command: "--character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci"
+    environment:
+      - "MYSQL_USER=domiot"
+      - "MYSQL_PASSWORD=dommiotpassword"
+      - "MYSQL_DATABASE=domiot"
+      - "MYSQL_ROOT_PASSWORD=domiotroot"
+    volumes:
+      - mysql-datavolume:/var/lib/mysql
+      # Add any custom SQL to be run on container creation in this directory
+      - ./sql/:/docker-entrypoint-initdb.d/
+    ports:
+      - "3306:3306"

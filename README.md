@@ -1,13 +1,10 @@
 # domiot-backend
-Site CRUD, Users CRUD, devices CRUD
+Devices CRUD
 ## Starting the service
-The service is built as a JEE war. It is meant to be managed by a JEE container.
+TODO
   
 ## It has the following features:
-* Create, read, update and deleting sites, users, devices
-
-## It lacks the following features:
-* It is under construction. Wishes will be determined after the first stable version 
+* Read data from MQTT broker, such as device data, config data
 
 ## Technical specs
 
@@ -67,3 +64,8 @@ Please review the settings in the application.yml configuration file for logging
 So now you have a micro service that handles your home's sensor data. Okay, what then?
 See the power-meter repo: https://github.com/yeronimuz/PowerMeter for reading measurements from your smart power meter.
 and the web-service repo: https://github.com/yeronimuz/lnb-iot-webservice
+
+## misc code snippets
+docker context create remote --docker host=ssh://jeroen@192.168.2.75
+
+docker-compose --context remote up -d

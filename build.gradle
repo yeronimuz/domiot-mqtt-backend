@@ -31,28 +31,30 @@ publishing {
 
 dependencies {
     implementation group: 'org.lankheet.domiot', name: 'domiot-datatypes', version: '0.7.0-SNAPSHOT'
-    implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.9'
-    implementation group: 'org.lankheet.domiot', name: 'domiot-rest-api', version: '1.1.0-SNAPSHOT'
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
+//    implementation group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.2.5'
+//    implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.9'
+//    implementation group: 'org.lankheet.domiot', name: 'domiot-rest-api', version: '1.1.0-SNAPSHOT'
+//    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.1.5'
+    implementation group: 'org.springframework.integration', name: 'spring-integration-mqtt', version: '6.1.4'
+
+//    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '3.1.5'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.1.3'
+//    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.3.0'
+    // jdbc:mariadb://localhost:3306/DB?user=root&password=myPassword
+//    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
     implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.3.Final'
-
-    compileOnly 'jakarta.platform:jakarta.jakartaee-web-api:9.1.0'
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
+    implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
+//    implementation group: 'org.flywaydb', name: 'flyway-mysql', version: '10.0.1'
     compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
-    compileOnly 'org.hibernate:hibernate-core:6.1.7.Final'
+//    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 
-    testImplementation 'jakarta.platform:jakarta.jakartaee-web-api:9.1.0'
     testImplementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.2'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.11.2'
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.11.2'
     testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.9.0'
-    // Highest Derby version with EmbeddedDriver
-    testImplementation group: 'org.apache.derby', name: 'derby', version: '10.14.2.0'
-    testImplementation 'org.hibernate:hibernate-core:6.1.7.Final'
-    testImplementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.6.10.Final'
     testImplementation 'org.hamcrest:hamcrest-junit:2.0.0.0'
-    testImplementation group: 'org.jboss.arquillian.junit', name: 'arquillian-junit-container', version: '1.6.0.Final'
-    testImplementation group: 'org.jboss.arquillian', name: 'arquillian-bom', version: '1.6.0.Final'
 }
 
 test{
