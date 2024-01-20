@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOG_FILE" value="${LOG_FILE}"/>
+
+    <if condition='property("LOG_FILE").contains("/")'>
+        <then>
+
+            <appender name="FILE"
+                          class="ch.qos.logback.core.rolling.RollingFileAppender">
+                    <encoder>
+                        <pattern>${FILE_LOG_PATTERN}</pattern>
+                    </encoder>
+                    <file>${LOG_FILE}</file>
+                    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+                        <fileNamePattern>${LOG_FILE}.%i</fileNamePattern>
+                    </rollingPolicy>
+                    <triggeringPolicy
+                            class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                        <MaxFileSize>100MB</MaxFileSize>
+                    </triggeringPolicy>
+                </appender>
+
+            <root level="INFO">
+                <appender-ref ref="FILE"/>
+            </root>
+        </then>
+        <else>
+            <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+            <root level="INFO">
+                <appender-ref ref="CONSOLE" />
+            </root>
+        </else>
+    </if>
+
+</configuration>

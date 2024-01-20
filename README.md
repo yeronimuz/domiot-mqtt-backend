@@ -1,19 +1,20 @@
 # domiot-backend
-Devices CRUD
+Subscribe to all data from an MQTT broker
 ## Starting the service
-TODO
+Dockerized, TODO
   
 ## It has the following features:
-* Read data from MQTT broker, such as device data, config data
+* Read device data from MQTT broker, such as device data, config data
+* Store the received data in a database
+* Provide MQTT broker with (new) config data
 
 ## Technical specs
 
 # How to setup the domotics eco-system:
 The following items are required:
 * An mqtt message broker, like mosquitto
-* A Java Enterprise Container, like Wildfly
+* Docker
 * Some mqtt devices
-* A domiot IOT service. It acts on sensor data and forwards it to this backend service. It also manages scenes, schemes and parameter management
 ## Simple setup
 
 ## Remote setup
@@ -61,7 +62,7 @@ Configuring the mosquitto (on site):
 Please review the settings in the application.yml configuration file for logging, mqtt and database settings.
 
 # What's next?
-So now you have a micro service that handles your home's sensor data. Okay, what then?
+Now you have a micro service that handles your home's sensor data.
 See the power-meter repo: https://github.com/yeronimuz/PowerMeter for reading measurements from your smart power meter.
 and the web-service repo: https://github.com/yeronimuz/lnb-iot-webservice
 

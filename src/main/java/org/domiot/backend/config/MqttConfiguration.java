@@ -35,8 +35,7 @@ public class MqttConfiguration {
     @Bean
     public MessageProducer inbound() {
         MqttPahoMessageDrivenChannelAdapter adapter =
-                new MqttPahoMessageDrivenChannelAdapter(this.url, "testClient",
-                        "topic1", "topic2");
+                new MqttPahoMessageDrivenChannelAdapter(url, "mqtt-backend", "#");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);

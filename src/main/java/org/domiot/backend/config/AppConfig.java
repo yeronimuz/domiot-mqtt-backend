@@ -1,35 +1,13 @@
 package org.domiot.backend.config;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-//@EnableJpaRepositories("org.lankheet.domiot.entities")
+@EnableJpaRepositories(basePackages = {"org.domiot.backend.database", "org.lankheet.domiot.entities"})
+@ComponentScan(basePackages = "org.domiot.backend")
+@EntityScan("org.lankheet.domiot.entities")
 class AppConfig {
-
-//    @Bean
-//    public DataSource dataSource() {
-//        return new MariaDbDataSource();
-//    }
-//
-//    @Bean
-//    public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
-//        return new JpaTransactionManager(emf);
-//    }
-//
-//    @Bean
-//    public JpaVendorAdapter jpaVendorAdapter() {
-//        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-//        jpaVendorAdapter.setDatabase(Database.MYSQL);
-//        jpaVendorAdapter.setGenerateDdl(true);
-//        return jpaVendorAdapter;
-//    }
-//
-//    @Bean
-//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-//        LocalContainerEntityManagerFactoryBean lemfb = new LocalContainerEntityManagerFactoryBean();
-//        lemfb.setDataSource(dataSource());
-//        lemfb.setJpaVendorAdapter(jpaVendorAdapter());
-//        lemfb.setPackagesToScan("org.lankheet.domiot.entities");
-//        return lemfb;
-//    }
 }
