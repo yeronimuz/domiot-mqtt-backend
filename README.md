@@ -1,7 +1,5 @@
 # domiot-backend
-* Subscribe to all data from an MQTT broker
-* Convert measurements to an hourly, daily, monthly. This conversion will be scheduled periodically.
-
+Subscribe to all data from an MQTT broker
 ## Starting the service
 Dockerized, TODO
   
@@ -12,7 +10,7 @@ Dockerized, TODO
 
 ## Technical specs
 
-# How to setup the domotics ecosystem:
+# How to setup the domotics eco-system:
 The following items are required:
 * An mqtt message broker, like mosquitto
 * Docker
@@ -20,7 +18,7 @@ The following items are required:
 ## Simple setup
 
 ## Remote setup
-In this setup all devices and an mqtt message broker are running locally and a bridged one is running remotely. All other services have to be running in the cloud.
+In this setup all devices and an mqtt message broker is running locally and a bridged one is running remotely. All other services have to be running in the cloud.
 
 # Installing mosquitto
 You could do this several ways. I installed mosquitto on 
@@ -55,7 +53,7 @@ Configuring the mosquitto (on site):
 <code>
     // allows anyone to listen on dynamic ports
         permission java.net.SocketPermission "localhost:0", "listen";
-        permission java.net.SocketPermission "locahost:1883", "listen,resolve";
+-->        permission java.net.SocketPermission "locahost:1883", "listen,resolve";
     
 </code>
 1. In this case, the mqtt broker listens on local host, port 1883
