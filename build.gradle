@@ -1,7 +1,19 @@
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-apply plugin: 'jacoco'
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+    }
+}
 
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
+    id 'maven-publish'
+    id 'jacoco'
+}
 repositories {
     mavenLocal()
     mavenCentral()
@@ -13,6 +25,9 @@ jacoco {
 }
 
 jar {
+    manifest {
+        attributes "Main-Class": "org.domiot.backend.DomiotBackendApplication"
+    }
     baseName = rootProject.name
 }
 
