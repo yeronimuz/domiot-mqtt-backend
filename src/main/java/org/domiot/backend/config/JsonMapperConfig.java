@@ -10,19 +10,11 @@ import org.springframework.context.annotation.Primary;
 
 import java.time.format.DateTimeFormatter;
 
-/**
- * JsonMapper configuration
- */
 @Configuration
 public class JsonMapperConfig {
 
     private static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
 
-    /**
-     * General object mapper for deserializing objects that are received through Mqtt
-     *
-     * @return The object mapper
-     */
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
