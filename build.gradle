@@ -19,10 +19,18 @@ repositories {
     mavenCentral()
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 jacoco {
     toolVersion = "0.8.8"
     reportsDir = file("$buildDir/customJacocoReportDir")
 }
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 jar {
     manifest {
@@ -56,7 +64,8 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.14'
     implementation group: 'org.codehaus.janino', name: 'janino', version: '3.1.7'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5', version: '2.15.1'
-    implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-jakarta-xmlbind-annotations', version: '2.13.3'
+    implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-jakarta-xmlbind-annotations', version: '2.15.1'
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2")
     // jdbc:mariadb://localhost:3306/DB?user=root&password=myPassword
     implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.3.Final'
     implementation group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.3.Final'
