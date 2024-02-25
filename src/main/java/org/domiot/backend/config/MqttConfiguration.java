@@ -13,22 +13,25 @@ import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannel
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 
+/**
+ * The MQTT configuration using broker parameters from application.properties file
+ */
 @Configuration
 @Slf4j
 public class MqttConfiguration {
 
     @Value("${mqtt.url}")
-    private String url;// tcp://localhost:1883
+    private String url;
     @Value("${mqtt.username}")
-    private String userName; // johndoe
+    private String userName;
     @Value("${mqtt.password}")
-    private String password; // secret
+    private String password;
     @Value("${mqtt.caFilePath}")
-    private String caFilePath; // /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+    private String caFilePath;
     @Value("${mqtt.crtFilePath}")
-    private String crtFilePath; // null
+    private String crtFilePath;
     @Value("${mqtt.clientKeyFilePath}")
-    private String clientKeyFilePath; // null
+    private String clientKeyFilePath;
 
     @Bean
     public MessageChannel mqttInputChannel() {
@@ -42,6 +45,7 @@ public class MqttConfiguration {
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
+        adapter.addTopic("meterbox/sensor/#");
         adapter.setOutputChannel(mqttInputChannel());
         return adapter;
     }
