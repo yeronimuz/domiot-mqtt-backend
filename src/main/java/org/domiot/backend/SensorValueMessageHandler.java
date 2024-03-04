@@ -1,6 +1,5 @@
 package org.domiot.backend;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,6 +28,8 @@ public class SensorValueMessageHandler {
     @Autowired
     private DeviceService deviceService;
 
+    private Integer lastMqttId = 0;
+
     /**
      * General MQTT message handler
      *
@@ -34,15 +39,22 @@ public class SensorValueMessageHandler {
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public MessageHandler handler() {
         return message -> {
-            SensorValueDto sensorValue = null;
-
-            try {
-                sensorValue = objectMapper.readValue(message.getPayload().toString(), SensorValueDto.class);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+            Object mqttId = message.getHeaders().entrySet().stream()
+                    .collect(Collectors.toMap(Entry::getKey, Entry::getValue))
+                    .get("mqtt_id");
+            if ((mqttId instanceof Integer) && mqttId.equals(lastMqttId)) {
+                log.trace("Dropping mqtt id {}", mqttId);
+            } else {
+                SensorValueDto sensorValue = null;
+                log.trace("Msg: {}", message);
+                try {
+                    sensorValue = objectMapper.readValue(message.getPayload().toString(), SensorValueDto.class);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                SensorValueDto sensorValueDtoSaved = sensorValueService.saveSensorValue(sensorValue);
+                this.lastMqttId = (Integer) mqttId;
             }
-            sensorValueService.saveSensorValue(sensorValue);
-            log.info("SensorValue: {}", sensorValue);
         };
     }
 }
