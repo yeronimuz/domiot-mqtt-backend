@@ -1,12 +1,9 @@
-FROM anapsix/alpine-java
+FROM bitnami/java:17
 MAINTAINER jeroenlankheet <yeronimuz@gmail.com>
-
-WORKDIR /app
-
-# Copy jar and application.properties to docker build directory!
-# application.properties host's mqtt-broker is at 172.17.0.1. This is a temp workaround until mosquitto is in it's own container
-
-ADD application.yml /app
-ADD ../build/libs/lnb-domotics-backend-0.4-RC.jar /app
-
-CMD ["java", "-jar", "/app/lnb-domotics-backend-0.4-RC.jar", "/app/application.yml"]
+ARG JAR_FILE
+VOLUME /tmp
+RUN mkdir -p /opt/domiot-backend
+COPY build/libs/${JAR_FILE} /opt/mqtt-service/backend.jar
+COPY src/main/resources/application.properties /opt/mqtt-backend/
+CPPY logback-spring.xml /opt/mqtt-backend/
+ENTRYPOINT ["java","-jar","/opt/mdomiot-backend/backend.jar"]
