@@ -1,16 +1,16 @@
 package org.domiot.backend.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.domiot.backend.SensorValueMessageHandler;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
-import org.springframework.integration.core.MessageProducer;
+import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
-import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 
 /**
@@ -39,25 +39,25 @@ public class MqttConfiguration {
     }
 
     @Bean
-    public MessageProducer inbound() {
-        MqttPahoMessageDrivenChannelAdapter adapter =
-                new MqttPahoMessageDrivenChannelAdapter(url, "mqtt-backend", mqttClientFactory(), "#");
-        adapter.setCompletionTimeout(5000);
-        adapter.setConverter(new DefaultPahoMessageConverter());
-        adapter.setQos(1);
-        adapter.addTopic("meterbox/sensor/#");
-        adapter.setOutputChannel(mqttInputChannel());
-        return adapter;
-    }
-
-    @Bean
     public MqttPahoClientFactory mqttClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
         MqttConnectOptions options = new MqttConnectOptions();
+        options.setConnectionTimeout(15000);
+        options.setMaxReconnectDelay(1000);
+        options.setAutomaticReconnect(true);
         options.setServerURIs(new String[]{url});
         options.setUserName(userName);
         options.setPassword(password.toCharArray());
         factory.setConnectionOptions(options);
         return factory;
+    }
+
+    @Bean
+    public IntegrationFlow mqttInbound(MqttPahoClientFactory mqttClientFactory,
+                                       SensorValueMessageHandler sensorValueMessageHandler) {
+        return IntegrationFlow.from(
+                        new MqttPahoMessageDrivenChannelAdapter("mqtt-backend2", mqttClientFactory, "#"))
+                .handle(sensorValueMessageHandler)
+                .get();
     }
 }

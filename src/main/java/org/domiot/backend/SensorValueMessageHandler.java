@@ -9,17 +9,19 @@ import org.lankheet.domiot.domotics.dto.SensorValueDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
-import org.springframework.stereotype.Service;
+import org.springframework.messaging.MessagingException;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
-public class SensorValueMessageHandler {
+public class SensorValueMessageHandler implements MessageHandler {
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -56,5 +58,27 @@ public class SensorValueMessageHandler {
                 this.lastMqttId = (Integer) mqttId;
             }
         };
+    }
+
+    @Override
+    public void handleMessage(Message<?> message) throws MessagingException {
+        log.debug("Received Message: " + message.getPayload());
+
+        Object mqttId = message.getHeaders().entrySet().stream()
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue))
+                .get("mqtt_id");
+        if ((mqttId instanceof Integer) && mqttId.equals(lastMqttId)) {
+            log.trace("Dropping mqtt id {}", mqttId);
+        } else {
+            SensorValueDto sensorValue = null;
+            log.trace("Msg: {}", message);
+            try {
+                sensorValue = objectMapper.readValue(message.getPayload().toString(), SensorValueDto.class);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            SensorValueDto sensorValueDtoSaved = sensorValueService.saveSensorValue(sensorValue);
+            this.lastMqttId = (Integer) mqttId;
+        }
     }
 }
