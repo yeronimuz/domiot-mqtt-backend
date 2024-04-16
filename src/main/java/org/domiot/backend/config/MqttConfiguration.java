@@ -32,6 +32,8 @@ public class MqttConfiguration {
     private String crtFilePath;
     @Value("${mqtt.clientKeyFilePath}")
     private String clientKeyFilePath;
+    @Value("mqtt.clientId")
+    private String clientId;
 
     @Bean
     public MessageChannel mqttInputChannel() {
@@ -43,7 +45,7 @@ public class MqttConfiguration {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
         MqttConnectOptions options = new MqttConnectOptions();
         options.setConnectionTimeout(15000);
-        options.setMaxReconnectDelay(1000);
+        options.setMaxReconnectDelay(5000);
         options.setAutomaticReconnect(true);
         options.setServerURIs(new String[]{url});
         options.setUserName(userName);
@@ -55,8 +57,11 @@ public class MqttConfiguration {
     @Bean
     public IntegrationFlow mqttInbound(MqttPahoClientFactory mqttClientFactory,
                                        SensorValueMessageHandler sensorValueMessageHandler) {
-        return IntegrationFlow.from(
-                        new MqttPahoMessageDrivenChannelAdapter("mqtt-backend2", mqttClientFactory, "#"))
+        // randomize the clientId, thus preventing reconnection problems
+        clientId += System.nanoTime();
+        MqttPahoMessageDrivenChannelAdapter channelAdapter = new MqttPahoMessageDrivenChannelAdapter(clientId, mqttClientFactory, "#");
+        channelAdapter.setErrorChannelName("errorChannel");
+        return IntegrationFlow.from(channelAdapter)
                 .handle(sensorValueMessageHandler)
                 .get();
     }
