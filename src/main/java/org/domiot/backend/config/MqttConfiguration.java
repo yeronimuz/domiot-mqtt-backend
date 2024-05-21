@@ -1,7 +1,7 @@
 package org.domiot.backend.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.domiot.backend.SensorValueMessageHandler;
+import org.domiot.backend.service.mqtt.SensorValueMessageHandler;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -61,6 +61,7 @@ public class MqttConfiguration {
         clientId += System.nanoTime();
         MqttPahoMessageDrivenChannelAdapter channelAdapter = new MqttPahoMessageDrivenChannelAdapter(clientId, mqttClientFactory, "#");
         channelAdapter.setErrorChannelName("errorChannel");
+        channelAdapter.setQos(1);
         return IntegrationFlow.from(channelAdapter)
                 .handle(sensorValueMessageHandler)
                 .get();

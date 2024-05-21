@@ -1,4 +1,4 @@
-package org.domiot.backend;
+package org.domiot.backend.service.mqtt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
