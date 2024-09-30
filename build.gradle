@@ -50,13 +50,13 @@ configurations {
 }
 
 dependencies {
-    implementation group: 'org.lankheet.domiot', name: 'domiot-datatypes', version: '0.8.0-SNAPSHOT'
-    implementation group: 'org.lankheet.domiot', name: 'domiot-rest-api', version: '1.1.1-SNAPSHOT'
+    implementation group: 'org.lankheet.domiot', name: 'domiot-datatypes', version: '0.8.1-SNAPSHOT'
+    implementation group: 'org.lankheet.domiot', name: 'domiot-rest-api', version: '1.2.0-SNAPSHOT'
 //    implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.9'
     implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '3.2.5'
     implementation group: 'org.springframework.integration', name: 'spring-integration-mqtt', version: '6.2.4'
     implementation 'org.springframework.boot:spring-boot-starter:3.2.4'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.3.0'
+//    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.1.5'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.4'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.2.4'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.2.5'

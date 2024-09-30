@@ -1,7 +1,7 @@
 package org.domiot.backend.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.domiot.backend.service.mqtt.SensorValueMessageHandler;
+import org.domiot.backend.service.mqtt.MqttMessageHandler;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -54,16 +54,18 @@ public class MqttConfiguration {
         return factory;
     }
 
+    // TODO: Check https://stackoverflow.com/questions/67391175/how-can-we-have-different-handlers-to-subscribe-messages-from-different-topics-u
+
     @Bean
     public IntegrationFlow mqttInbound(MqttPahoClientFactory mqttClientFactory,
-                                       SensorValueMessageHandler sensorValueMessageHandler) {
+                                       MqttMessageHandler mqttMessageHandler) {
         // randomize the clientId, thus preventing reconnection problems
         clientId += System.nanoTime();
         MqttPahoMessageDrivenChannelAdapter channelAdapter = new MqttPahoMessageDrivenChannelAdapter(clientId, mqttClientFactory, "#");
         channelAdapter.setErrorChannelName("errorChannel");
         channelAdapter.setQos(1);
         return IntegrationFlow.from(channelAdapter)
-                .handle(sensorValueMessageHandler)
+                .handle(mqttMessageHandler)
                 .get();
     }
 }
