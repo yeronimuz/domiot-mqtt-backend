@@ -1,8 +1,8 @@
 package org.domiot.backend.service;
 
 import org.domiot.backend.database.DeviceEntityRepository;
+import org.lankheet.domiot.domotics.dto.DeviceDto;
 import org.lankheet.domiot.mapper.DeviceMapper;
-import org.lankheet.domiot.model.Device;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,10 +16,10 @@ public class DeviceService {
     /**
      * Save a device in the database and return the updated object.
      *
-     * @param device The device to store
+     * @param deviceDto The device to store
      * @return The updated device
      */
-    public Device saveDevice(Device device) {
-        return deviceMapper.map(repository.save(deviceMapper.map(device)));
+    public DeviceDto saveDevice(DeviceDto deviceDto) {
+        return deviceMapper.map(repository.save(deviceMapper.map(deviceDto)));
     }
 }
