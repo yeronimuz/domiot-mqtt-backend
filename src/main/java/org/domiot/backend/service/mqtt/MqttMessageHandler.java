@@ -3,11 +3,11 @@ package org.domiot.backend.service.mqtt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.domiot.backend.mapper.DeviceDtoMapper;
 import org.domiot.backend.service.DeviceService;
 import org.domiot.backend.service.SensorValueService;
 import org.lankheet.domiot.domotics.dto.DeviceDto;
 import org.lankheet.domiot.domotics.dto.SensorValueDto;
-import org.lankheet.domiot.mapper.DeviceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.Message;
@@ -30,7 +30,7 @@ public class MqttMessageHandler implements MessageHandler {
     @Autowired
     private DeviceService deviceService;
     @Autowired
-    DeviceMapper deviceMapper;
+    DeviceDtoMapper deviceMapper;
 
     @Override
     public void handleMessage(Message<?> message) throws MessagingException {
@@ -52,6 +52,7 @@ public class MqttMessageHandler implements MessageHandler {
         DeviceDto returnDeviceDto = deviceService.saveDevice(deviceDto);
         // TODO: Create event for frontend
         // TODO: Activate return path
+        log.info("Device registered: {}", returnDeviceDto);
     }
 
     private void handleSensorValue(Message<?> message) {

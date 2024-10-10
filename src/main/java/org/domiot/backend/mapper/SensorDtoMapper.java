@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {SensorTypeDtoMapper.class, MqttTopicDtoMapper.class, DomiotParameterDtoMapper.class})
 public interface SensorDtoMapper {
 
+    @Mapping(source = "id", target = "sensorId")
     @Mapping(source = "mqttTopic", target = "mqttTopic.path")
     @Mapping(source = "parameterEntities", target = "parameters")
     @Mapping(target = "deviceMac", source = "deviceEntity.macAddress")
@@ -15,7 +16,7 @@ public interface SensorDtoMapper {
 
     @Mapping(source = "deviceMac", target = "deviceEntity.macAddress")
     @Mapping(source = "parameters", target = "parameterEntities")
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "sensorId")
     @Mapping(source = "mqttTopic.path", target = "mqttTopic")
     SensorEntity map(SensorDto sensorDto);
 }
