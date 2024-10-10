@@ -40,6 +40,13 @@ public class MqttConfiguration {
         return new DirectChannel();
     }
 
+    /**
+     * Configures and returns an instance of MqttPahoClientFactory.
+     * The factory is configured with connection options such as server URI,
+     * username, password, connection timeout, maximum reconnect delay, and automatic reconnect.
+     *
+     * @return an instance of MqttPahoClientFactory with the specified configurations
+     */
     @Bean
     public MqttPahoClientFactory mqttClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
