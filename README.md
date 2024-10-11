@@ -1,23 +1,26 @@
 # domiot-backend
-Devices CRUD
+* Subscribe to all data from an MQTT broker
+* Convert measurements to an hourly, daily, monthly. This conversion will be scheduled periodically.
+
 ## Starting the service
-TODO
+Dockerized, TODO
   
 ## It has the following features:
-* Read data from MQTT broker, such as device data, config data
+* Read device data from MQTT broker, such as device data, config data
+* Store the received data in a database
+* Provide MQTT broker with (new) config data
 
 ## Technical specs
 
-# How to setup the domotics eco-system:
+# How to setup the domotics ecosystem:
 The following items are required:
 * An mqtt message broker, like mosquitto
-* A Java Enterprise Container, like Wildfly
+* Docker
 * Some mqtt devices
-* A domiot IOT service. It acts on sensor data and forwards it to this backend service. It also manages scenes, schemes and parameter management
 ## Simple setup
 
 ## Remote setup
-In this setup all devices and an mqtt message broker is running locally and a bridged one is running remotely. All other services have to be running in the cloud.
+In this setup all devices and an mqtt message broker are running locally and a bridged one is running remotely. All other services have to be running in the cloud.
 
 # Installing mosquitto
 You could do this several ways. I installed mosquitto on 
@@ -52,7 +55,7 @@ Configuring the mosquitto (on site):
 <code>
     // allows anyone to listen on dynamic ports
         permission java.net.SocketPermission "localhost:0", "listen";
--->        permission java.net.SocketPermission "locahost:1883", "listen,resolve";
+        permission java.net.SocketPermission "locahost:1883", "listen,resolve";
     
 </code>
 1. In this case, the mqtt broker listens on local host, port 1883
@@ -61,7 +64,7 @@ Configuring the mosquitto (on site):
 Please review the settings in the application.yml configuration file for logging, mqtt and database settings.
 
 # What's next?
-So now you have a micro service that handles your home's sensor data. Okay, what then?
+Now you have a micro service that handles your home's sensor data.
 See the power-meter repo: https://github.com/yeronimuz/PowerMeter for reading measurements from your smart power meter.
 and the web-service repo: https://github.com/yeronimuz/lnb-iot-webservice
 

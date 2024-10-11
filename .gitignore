@@ -1,5 +1,4 @@
-/.classpath
-/.project
 /build/
 /.gradle/
-/derby.log
+/.idea/
+/logs/
