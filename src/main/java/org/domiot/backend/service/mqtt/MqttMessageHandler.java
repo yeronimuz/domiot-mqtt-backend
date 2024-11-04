@@ -1,5 +1,6 @@
 package org.domiot.backend.service.mqtt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,12 @@ public class MqttMessageHandler implements MessageHandler {
     }
 
     private void handleRegistration(Message<?> message) {
-        DeviceDto deviceDto = objectMapper.convertValue(message.getPayload(), DeviceDto.class);
+        DeviceDto deviceDto;
+        try {
+            deviceDto = objectMapper.readValue(message.getPayload().toString(), DeviceDto.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         DeviceDto returnDeviceDto = deviceService.saveDevice(deviceDto);
         // TODO: Create event for frontend
         // TODO: Activate return path
@@ -56,7 +62,7 @@ public class MqttMessageHandler implements MessageHandler {
     }
 
     private void handleSensorValue(Message<?> message) {
-        SensorValueDto sensorValue = null;
+        SensorValueDto sensorValue;
         try {
             sensorValue = objectMapper.readValue(message.getPayload().toString(), SensorValueDto.class);
         } catch (IOException e) {

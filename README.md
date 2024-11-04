@@ -88,7 +88,7 @@ Please review the settings in the application.yml configuration file for logging
 
 # What's next?
 
-Now you have a micro service that handles your home's sensor data.
+Now you have a service that handles your home's sensor data.
 See the power-meter repo: https://github.com/yeronimuz/PowerMeter for reading measurements from your smart power meter.
 and the web-service repo: https://github.com/yeronimuz/lnb-iot-webservice
 

@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DeviceService {
-    private DeviceEntityRepository repository;
-    private DeviceDtoMapper deviceMapper;
+    private final DeviceEntityRepository repository;
+    private final DeviceDtoMapper deviceMapper;
+
+    public DeviceService(DeviceEntityRepository repository, DeviceDtoMapper deviceMapper) {
+        this.repository = repository;
+        this.deviceMapper = deviceMapper;
+    }
 
     /**
      * Save a device in the database and return the updated object.
