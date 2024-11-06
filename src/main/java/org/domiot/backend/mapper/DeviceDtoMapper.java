@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
  *
  * Utilizes MapStruct for the mapping process and includes the SensorDtoMapper for nested mappings.
  */
-@Mapper(componentModel = "spring", uses = {SensorDtoMapper.class})
+@Mapper(componentModel = "spring", uses = {SensorDtoMapper.class, DomiotParameterDtoMapper.class})
 public interface DeviceDtoMapper {
 
     DeviceDto map(DeviceEntity device);
