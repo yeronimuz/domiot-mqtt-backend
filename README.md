@@ -1,4 +1,4 @@
-# domiot-backend
+# domiot-mqtt-backend
 * Subscribe to all data from an MQTT broker
 * Convert measurements to an hourly, daily, monthly. This conversion will be scheduled periodically.
 
