@@ -1,4 +1,5 @@
 package org.domiot.backend.mapper;
+import java.util.List;
 
 import org.lankheet.domiot.domotics.dto.SensorDto;
 import org.lankheet.domiot.entities.SensorEntity;
@@ -19,4 +20,6 @@ public interface SensorDtoMapper {
     @Mapping(target = "id", source = "sensorId")
     @Mapping(source = "mqttTopic.path", target = "mqttTopic")
     SensorEntity map(SensorDto sensorDto);
+
+    List<SensorEntity> map(List<SensorDto> sensors);
 }

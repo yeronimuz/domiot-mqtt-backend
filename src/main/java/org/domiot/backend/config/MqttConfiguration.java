@@ -1,17 +1,13 @@
 package org.domiot.backend.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.domiot.backend.service.mqtt.MqttMessageHandler;
+
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.channel.DirectChannel;
-import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
-import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
-import org.springframework.messaging.MessageChannel;
 
 /**
  * The MQTT configuration using broker parameters from application.properties file
@@ -32,16 +28,9 @@ public class MqttConfiguration {
     private String crtFilePath;
     @Value("${mqtt.clientKeyFilePath}")
     private String clientKeyFilePath;
-    @Value("mqtt.clientId")
-    private String clientId;
-
-    @Bean
-    public MessageChannel mqttInputChannel() {
-        return new DirectChannel();
-    }
 
     /**
-     * Configures and returns an instance of MqttPahoClientFactory.
+     * Configures and returns an instance of MqttPahoClientFactory
      * The factory is configured with connection options such as server URI,
      * username, password, connection timeout, maximum reconnect delay, and automatic reconnect.
      *
@@ -59,20 +48,5 @@ public class MqttConfiguration {
         options.setPassword(password.toCharArray());
         factory.setConnectionOptions(options);
         return factory;
-    }
-
-    // TODO: Check https://stackoverflow.com/questions/67391175/how-can-we-have-different-handlers-to-subscribe-messages-from-different-topics-u
-
-    @Bean
-    public IntegrationFlow mqttInbound(MqttPahoClientFactory mqttClientFactory,
-                                       MqttMessageHandler mqttMessageHandler) {
-        // randomize the clientId, thus preventing reconnection problems
-        clientId += System.nanoTime();
-        MqttPahoMessageDrivenChannelAdapter channelAdapter = new MqttPahoMessageDrivenChannelAdapter(clientId, mqttClientFactory, "#");
-        channelAdapter.setErrorChannelName("errorChannel");
-        channelAdapter.setQos(1);
-        return IntegrationFlow.from(channelAdapter)
-                .handle(mqttMessageHandler)
-                .get();
     }
 }

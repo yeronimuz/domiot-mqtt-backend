@@ -6,6 +6,7 @@ import org.domiot.backend.database.SensorValueEntityRepository;
 import org.domiot.backend.mapper.SensorValueDtoMapper;
 import org.lankheet.domiot.domotics.dto.SensorValueDto;
 import org.lankheet.domiot.entities.SensorValueEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SensorValueService {
     private final SensorValueEntityRepository sensorValueEntityRepository;
+//    @Qualifier("sensorValueDtoMapperImpl")
     private final SensorValueDtoMapper sensorValueMapper;
 
     /**
