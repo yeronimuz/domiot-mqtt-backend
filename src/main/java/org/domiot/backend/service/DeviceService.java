@@ -2,6 +2,7 @@ package org.domiot.backend.service;
 
 import org.domiot.backend.database.DeviceEntityRepository;
 import org.domiot.backend.mapper.DeviceDtoMapper;
+import org.domiot.backend.mapper.DomiotParameterDtoMapper;
 import org.domiot.backend.mapper.SensorDtoMapper;
 import org.lankheet.domiot.domotics.dto.DeviceDto;
 import org.lankheet.domiot.entities.DeviceEntity;
@@ -15,11 +16,13 @@ public class DeviceService {
     private final DeviceEntityRepository repository;
     private final DeviceDtoMapper deviceMapper;
     private final SensorDtoMapper sensorMapper;
+    private final DomiotParameterDtoMapper domiotParameterDtoMapper;
 
-    public DeviceService(DeviceEntityRepository repository, DeviceDtoMapper deviceMapper, SensorDtoMapper sensorMapper) {
+    public DeviceService(DeviceEntityRepository repository, DeviceDtoMapper deviceMapper, SensorDtoMapper sensorMapper, DomiotParameterDtoMapper domiotParameterDtoMapper) {
         this.repository = repository;
         this.deviceMapper = deviceMapper;
         this.sensorMapper = sensorMapper;
+        this.domiotParameterDtoMapper = domiotParameterDtoMapper;
     }
 
     /**
@@ -29,18 +32,21 @@ public class DeviceService {
      * @return The updated device
      */
     public DeviceDto saveDevice(DeviceDto deviceDto) {
-        // TODO: Find Device and update and save
         DeviceEntity deviceEntityStored = repository.findByMacAddress(deviceDto.getMacAddress());
-        if (deviceEntityStored != null) {
-            updateDevice(deviceDto, deviceEntityStored);
-        }
-        return deviceMapper.map(repository.save(deviceMapper.map(deviceDto)));
+        DeviceEntity returnedDeviceEntity = null;
+//        if (deviceEntityStored != null) {
+//            updateDevice(deviceDto, deviceEntityStored);
+//            returnedDeviceEntity = repository.save(deviceEntityStored);
+//        }
+        // FIXME: Return without update
+        return (deviceEntityStored == null) ? null : deviceMapper.map(deviceEntityStored);
     }
 
     private void updateDevice(DeviceDto deviceDto, DeviceEntity deviceEntityStored) {
-        deviceEntityStored.setMacAddress(deviceDto.getMacAddress());
         deviceEntityStored.setFirmwareVersion(deviceDto.getFirmwareVersion());
         deviceEntityStored.setHardwareVersion(deviceDto.getHardwareVersion());
         deviceEntityStored.setSensors(sensorMapper.map(deviceDto.getSensors()));
+        // TODO: Merge parameters
+        deviceEntityStored.setParameters(domiotParameterDtoMapper.mapDtosToEntities(deviceDto.getParameters()));
     }
 }

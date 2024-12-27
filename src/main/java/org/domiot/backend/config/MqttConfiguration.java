@@ -1,13 +1,21 @@
 package org.domiot.backend.config;
 
+import java.util.UUID;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
+import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
+import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
+import org.springframework.integration.mqtt.support.MqttHeaders;
+import org.springframework.messaging.MessageHandler;
 
 /**
  * The MQTT configuration using broker parameters from application.properties file
@@ -48,5 +56,25 @@ public class MqttConfiguration {
         options.setPassword(password.toCharArray());
         factory.setConnectionOptions(options);
         return factory;
+    }
+
+    @Bean
+    public IntegrationFlow mqttInFlow(MqttPahoClientFactory mqttClientFactory) {
+        String clientId = UUID.randomUUID().toString();
+        return IntegrationFlow.from(
+                        new MqttPahoMessageDrivenChannelAdapter(clientId,
+                                mqttClientFactory, "meterbox/sensor/#", "register"))
+                .route("headers['" + MqttHeaders.RECEIVED_TOPIC + "'].contains('sensor') ? 'sensorChannel' : 'registerChannel'")
+                .get();
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "mqttOutboundChannel")
+    public MessageHandler mqttOutbound() {
+        MqttPahoMessageHandler messageHandler =
+                new MqttPahoMessageHandler(UUID.randomUUID().toString(), mqttClientFactory());
+        messageHandler.setAsync(true);
+        messageHandler.setDefaultTopic("config");
+        return messageHandler;
     }
 }
