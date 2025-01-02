@@ -1,8 +1,11 @@
 package org.domiot.backend.service;
 
 import org.domiot.backend.database.DeviceEntityRepository;
-import org.lankheet.domiot.mapper.DeviceMapper;
-import org.lankheet.domiot.model.Device;
+import org.domiot.backend.mapper.DeviceDtoMapper;
+import org.domiot.backend.mapper.DomiotParameterDtoMapper;
+import org.domiot.backend.mapper.SensorDtoMapper;
+import org.lankheet.domiot.domotics.dto.DeviceDto;
+import org.lankheet.domiot.entities.DeviceEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,16 +13,40 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DeviceService {
-    private DeviceEntityRepository repository;
-    private DeviceMapper deviceMapper;
+    private final DeviceEntityRepository repository;
+    private final DeviceDtoMapper deviceMapper;
+    private final SensorDtoMapper sensorMapper;
+    private final DomiotParameterDtoMapper domiotParameterDtoMapper;
+
+    public DeviceService(DeviceEntityRepository repository, DeviceDtoMapper deviceMapper, SensorDtoMapper sensorMapper, DomiotParameterDtoMapper domiotParameterDtoMapper) {
+        this.repository = repository;
+        this.deviceMapper = deviceMapper;
+        this.sensorMapper = sensorMapper;
+        this.domiotParameterDtoMapper = domiotParameterDtoMapper;
+    }
 
     /**
-     * Save a device in the database and return the updated object.
+     * Save or update a device in the database and return the updated object.
      *
-     * @param device The device to store
+     * @param deviceDto The device to store
      * @return The updated device
      */
-    public Device saveDevice(Device device) {
-        return deviceMapper.map(repository.save(deviceMapper.map(device)));
+    public DeviceDto saveDevice(DeviceDto deviceDto) {
+        DeviceEntity deviceEntityStored = repository.findByMacAddress(deviceDto.getMacAddress());
+        DeviceEntity returnedDeviceEntity = null;
+//        if (deviceEntityStored != null) {
+//            updateDevice(deviceDto, deviceEntityStored);
+//            returnedDeviceEntity = repository.save(deviceEntityStored);
+//        }
+        // FIXME: Return without update
+        return (deviceEntityStored == null) ? null : deviceMapper.map(deviceEntityStored);
+    }
+
+    private void updateDevice(DeviceDto deviceDto, DeviceEntity deviceEntityStored) {
+        deviceEntityStored.setFirmwareVersion(deviceDto.getFirmwareVersion());
+        deviceEntityStored.setHardwareVersion(deviceDto.getHardwareVersion());
+        deviceEntityStored.setSensors(sensorMapper.map(deviceDto.getSensors()));
+        // TODO: Merge parameters
+        deviceEntityStored.setParameters(domiotParameterDtoMapper.mapDtosToEntities(deviceDto.getParameters()));
     }
 }

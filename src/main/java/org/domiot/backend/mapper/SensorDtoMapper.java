@@ -1,4 +1,5 @@
 package org.domiot.backend.mapper;
+import java.util.List;
 
 import org.lankheet.domiot.domotics.dto.SensorDto;
 import org.lankheet.domiot.entities.SensorEntity;
@@ -8,6 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {SensorTypeDtoMapper.class, MqttTopicDtoMapper.class, DomiotParameterDtoMapper.class})
 public interface SensorDtoMapper {
 
+    @Mapping(source = "id", target = "sensorId")
     @Mapping(source = "mqttTopic", target = "mqttTopic.path")
     @Mapping(source = "parameterEntities", target = "parameters")
     @Mapping(target = "deviceMac", source = "deviceEntity.macAddress")
@@ -15,7 +17,9 @@ public interface SensorDtoMapper {
 
     @Mapping(source = "deviceMac", target = "deviceEntity.macAddress")
     @Mapping(source = "parameters", target = "parameterEntities")
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "sensorId")
     @Mapping(source = "mqttTopic.path", target = "mqttTopic")
     SensorEntity map(SensorDto sensorDto);
+
+    List<SensorEntity> map(List<SensorDto> sensors);
 }

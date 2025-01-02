@@ -25,11 +25,11 @@
     </appender>
 
     <!-- LOG everything at INFO level -->
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="RollingFile"/>
     </root>
 
-    <logger name="org.domiot" level="info" additivity="false">
+    <logger name="org.domiot" level="debug" additivity="false">
         <appender-ref ref="RollingFile"/>
     </logger>
 

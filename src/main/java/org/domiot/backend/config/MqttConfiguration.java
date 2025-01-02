@@ -1,17 +1,21 @@
 package org.domiot.backend.config;
 
+import java.util.UUID;
+
 import lombok.extern.slf4j.Slf4j;
-import org.domiot.backend.service.mqtt.SensorValueMessageHandler;
+
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
-import org.springframework.messaging.MessageChannel;
+import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
+import org.springframework.integration.mqtt.support.MqttHeaders;
+import org.springframework.messaging.MessageHandler;
 
 /**
  * The MQTT configuration using broker parameters from application.properties file
@@ -32,14 +36,14 @@ public class MqttConfiguration {
     private String crtFilePath;
     @Value("${mqtt.clientKeyFilePath}")
     private String clientKeyFilePath;
-    @Value("mqtt.clientId")
-    private String clientId;
 
-    @Bean
-    public MessageChannel mqttInputChannel() {
-        return new DirectChannel();
-    }
-
+    /**
+     * Configures and returns an instance of MqttPahoClientFactory
+     * The factory is configured with connection options such as server URI,
+     * username, password, connection timeout, maximum reconnect delay, and automatic reconnect.
+     *
+     * @return an instance of MqttPahoClientFactory with the specified configurations
+     */
     @Bean
     public MqttPahoClientFactory mqttClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
@@ -55,15 +59,22 @@ public class MqttConfiguration {
     }
 
     @Bean
-    public IntegrationFlow mqttInbound(MqttPahoClientFactory mqttClientFactory,
-                                       SensorValueMessageHandler sensorValueMessageHandler) {
-        // randomize the clientId, thus preventing reconnection problems
-        clientId += System.nanoTime();
-        MqttPahoMessageDrivenChannelAdapter channelAdapter = new MqttPahoMessageDrivenChannelAdapter(clientId, mqttClientFactory, "#");
-        channelAdapter.setErrorChannelName("errorChannel");
-        channelAdapter.setQos(1);
-        return IntegrationFlow.from(channelAdapter)
-                .handle(sensorValueMessageHandler)
+    public IntegrationFlow mqttInFlow(MqttPahoClientFactory mqttClientFactory) {
+        String clientId = UUID.randomUUID().toString();
+        return IntegrationFlow.from(
+                        new MqttPahoMessageDrivenChannelAdapter(clientId,
+                                mqttClientFactory, "sensor/#", "register"))
+                .route("headers['" + MqttHeaders.RECEIVED_TOPIC + "'].contains('sensor') ? 'sensorChannel' : 'registerChannel'")
                 .get();
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "mqttOutboundChannel")
+    public MessageHandler mqttOutbound() {
+        MqttPahoMessageHandler messageHandler =
+                new MqttPahoMessageHandler(UUID.randomUUID().toString(), mqttClientFactory());
+        messageHandler.setAsync(true);
+        messageHandler.setDefaultTopic("config");
+        return messageHandler;
     }
 }

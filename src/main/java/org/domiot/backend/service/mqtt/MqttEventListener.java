@@ -14,6 +14,7 @@ public class MqttEventListener implements ApplicationListener<MqttIntegrationEve
         if (event instanceof MqttConnectionFailedEvent) {
             log.error("mqtt connection failed: {}", event);
         }
+        log.info("MqttIntegrationEvent: {}", event);
     }
 
     @Override
