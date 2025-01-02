@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-//@RequiredArgsConstructor
 public class MqttMessageHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
@@ -45,7 +44,6 @@ public class MqttMessageHandler {
     public IntegrationFlow flowSensorValues() {
         return IntegrationFlow.from("sensorChannel")
                 .handle((payload, headers) -> {
-                    log.debug("message from sensor {} : {}", payload, headers);
                     handleSensorValue(payload);
                     return null;
                 })
@@ -56,7 +54,6 @@ public class MqttMessageHandler {
     public IntegrationFlow flowRegister() {
         return IntegrationFlow.from("registerChannel")
                 .handle((payload, headers) -> {
-                    log.debug("message from register {}: {}", payload, headers);
                     handleRegistration(payload);
                     return null;
                 })

@@ -63,7 +63,7 @@ public class MqttConfiguration {
         String clientId = UUID.randomUUID().toString();
         return IntegrationFlow.from(
                         new MqttPahoMessageDrivenChannelAdapter(clientId,
-                                mqttClientFactory, "meterbox/sensor/#", "register"))
+                                mqttClientFactory, "sensor/#", "register"))
                 .route("headers['" + MqttHeaders.RECEIVED_TOPIC + "'].contains('sensor') ? 'sensorChannel' : 'registerChannel'")
                 .get();
     }
