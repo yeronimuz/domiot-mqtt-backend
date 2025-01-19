@@ -36,14 +36,9 @@ public class MqttConfiguration {
     private String crtFilePath;
     @Value("${mqtt.clientKeyFilePath}")
     private String clientKeyFilePath;
+    @Value("${mqtt.clientId}")
+    private String clientId;
 
-    /**
-     * Configures and returns an instance of MqttPahoClientFactory
-     * The factory is configured with connection options such as server URI,
-     * username, password, connection timeout, maximum reconnect delay, and automatic reconnect.
-     *
-     * @return an instance of MqttPahoClientFactory with the specified configurations
-     */
     @Bean
     public MqttPahoClientFactory mqttClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
@@ -51,18 +46,19 @@ public class MqttConfiguration {
         options.setConnectionTimeout(15000);
         options.setMaxReconnectDelay(5000);
         options.setAutomaticReconnect(true);
+        options.setCleanSession(false);
         options.setServerURIs(new String[]{url});
         options.setUserName(userName);
         options.setPassword(password.toCharArray());
+        options.setAutomaticReconnect(true);
         factory.setConnectionOptions(options);
         return factory;
     }
 
     @Bean
     public IntegrationFlow mqttInFlow(MqttPahoClientFactory mqttClientFactory) {
-        String clientId = UUID.randomUUID().toString();
         return IntegrationFlow.from(
-                        new MqttPahoMessageDrivenChannelAdapter(clientId,
+                        new MqttPahoMessageDrivenChannelAdapter(this.clientId,
                                 mqttClientFactory, "sensor/#", "register"))
                 .route("headers['" + MqttHeaders.RECEIVED_TOPIC + "'].contains('sensor') ? 'sensorChannel' : 'registerChannel'")
                 .get();

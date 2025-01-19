@@ -11,7 +11,8 @@ buildscript {
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'org.springframework.boot' version '3.2.3'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'io.spring.dependency-management' version '1.1.0'
+
     id 'java'
     id 'maven-publish'
     id 'jacoco'
@@ -50,23 +51,23 @@ publishing {
 //}
 
 ext {
-    springBootVersion = '3.4.1'
+    springBootVersion = '3.4.2'
 }
 
 dependencies {
     implementation group: 'org.lankheet.domiot', name: 'domiot-datatypes', version: '0.8.2-SNAPSHOT'
     implementation group: 'org.lankheet.domiot', name: 'domiot-rest-api', version: '1.2.0-SNAPSHOT'
 //    implementation group: 'io.swagger', name: 'swagger-annotations', version: '1.6.9'
-    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: "3.4.1"
-    implementation group: 'org.springframework.data', name: 'spring-data-commons', version: '3.4.1'
-    implementation group: 'org.springframework.integration', name: 'spring-integration-mqtt', version: '6.3.5'
-    implementation group: 'org.springframework.integration', name: 'spring-integration-jmx', version: '6.3.5'
-    implementation group: 'org.springframework.integration', name: 'spring-integration-core', version: '6.3.5'
+    implementation "org.springframework.data:spring-data-jpa:$springBootVersion"
+    implementation "org.springframework.data:spring-data-commons:$springBootVersion"
+    implementation group: 'org.springframework.integration', name: 'spring-integration-mqtt', version: '6.3.7'
+    implementation group: 'org.springframework.integration', name: 'spring-integration-jmx', version: '6.3.7'
+    implementation group: 'org.springframework.integration', name: 'spring-integration-core', version: '6.3.7'
     implementation 'org.springframework.boot:spring-boot-starter:3.3.5'
 //    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.1.5'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: "3.4.0"
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: "3.4.0"
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "3.4.0"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: "3.4.1"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: "3.4.1"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "3.4.1"
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.3.3'
 //    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
 //    implementation group: 'org.codehaus.janino', name: 'janino', version: '3.1.7'
