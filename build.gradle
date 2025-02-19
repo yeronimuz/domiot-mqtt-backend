@@ -12,11 +12,12 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.0'
-
+    id 'com.bmuschko.docker-remote-api' version '9.4.0'
     id 'java'
     id 'maven-publish'
     id 'jacoco'
 }
+
 repositories {
     mavenLocal()
     mavenCentral()
@@ -53,6 +54,14 @@ publishing {
 ext {
     springBootVersion = '3.4.2'
 }
+
+import com.bmuschko.gradle.docker.tasks.image.*
+
+tasks.register('buildDomiotBackendImage', DockerBuildImage) {
+    inputDir = file('src/main/resources/docker')
+    images.add('domiot/domiot-mqtt-backend:latest')
+}
+
 
 dependencies {
     implementation group: 'org.lankheet.domiot', name: 'domiot-datatypes', version: '0.8.2-SNAPSHOT'
@@ -106,5 +115,3 @@ test {
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
 }
-
-

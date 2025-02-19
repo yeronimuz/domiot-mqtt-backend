@@ -90,6 +90,12 @@ Now you have a service that handles your home's sensor data.
 See the power-meter repo: https://github.com/yeronimuz/PowerMeter for reading measurements from your smart power meter.
 The web-service handles the domotics environment, see the web-service repo: https://github.com/yeronimuz/lnb-iot-webservice
 
+# Docker
+The docker image is available at https://hub.docker.com/repository/docker/yeronimuz/domiot-mqtt-backend
+
+Pushing to the docker registry:
+docker push yeronimuz/domiot-mqtt-backend:tagname
+
 # What's next?
 * Database robustness, reconnection ability.
 * Storing data locally while no database connection is possible
