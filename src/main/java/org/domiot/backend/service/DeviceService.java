@@ -36,18 +36,19 @@ public class DeviceService {
      */
     public DeviceDto saveDevice(DeviceDto deviceDto) {
         DeviceEntity deviceEntityStored = repository.findByMacAddress(deviceDto.getMacAddress());
-        if (deviceEntityStored == null) {
-            log.debug("Creating new device");
-            DeviceEntity newDeviceEntity = deviceMapper.map(deviceDto);
-            newDeviceEntity.getSensors().forEach(sensorDto -> {
-                sensorDto.setId(null);
-                sensorDto.setDeviceEntity(newDeviceEntity);
-            });
-            deviceEntityStored = repository.save(newDeviceEntity);
+        if (deviceEntityStored != null) {
+            updateDevice(deviceDto, deviceEntityStored);
+            deviceEntityStored = repository.save(deviceEntityStored);
         } else {
-            log.debug("Existing device");
+            deviceEntityStored = repository.save(deviceMapper.map(deviceDto));
         }
 
         return deviceMapper.map(deviceEntityStored);
+    }
+
+    private void updateDevice(DeviceDto deviceDto, DeviceEntity deviceEntityStored) {
+        deviceEntityStored.setFirmwareVersion(deviceDto.getFirmwareVersion());
+        deviceEntityStored.setHardwareVersion(deviceDto.getHardwareVersion());
+        deviceEntityStored.setSensors(sensorMapper.map(deviceDto.getSensors()));
     }
 }
