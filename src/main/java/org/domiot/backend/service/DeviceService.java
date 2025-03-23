@@ -33,20 +33,19 @@ public class DeviceService {
      */
     public DeviceDto saveDevice(DeviceDto deviceDto) {
         DeviceEntity deviceEntityStored = repository.findByMacAddress(deviceDto.getMacAddress());
-        DeviceEntity returnedDeviceEntity = null;
-//        if (deviceEntityStored != null) {
-//            updateDevice(deviceDto, deviceEntityStored);
-//            returnedDeviceEntity = repository.save(deviceEntityStored);
-//        }
-        // FIXME: Return without update
-        return (deviceEntityStored == null) ? null : deviceMapper.map(deviceEntityStored);
+        if (deviceEntityStored != null) {
+            updateDevice(deviceDto, deviceEntityStored);
+            deviceEntityStored = repository.save(deviceEntityStored);
+        } else {
+            deviceEntityStored = repository.save(deviceMapper.map(deviceDto));
+        }
+
+        return deviceMapper.map(deviceEntityStored);
     }
 
     private void updateDevice(DeviceDto deviceDto, DeviceEntity deviceEntityStored) {
         deviceEntityStored.setFirmwareVersion(deviceDto.getFirmwareVersion());
         deviceEntityStored.setHardwareVersion(deviceDto.getHardwareVersion());
         deviceEntityStored.setSensors(sensorMapper.map(deviceDto.getSensors()));
-        // TODO: Merge parameters
-        deviceEntityStored.setParameters(domiotParameterDtoMapper.mapDtosToEntities(deviceDto.getParameters()));
     }
 }
