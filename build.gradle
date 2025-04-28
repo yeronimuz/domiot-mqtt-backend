@@ -79,6 +79,8 @@ dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
     implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
     implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
+    implementation 'ch.qos.logback:logback-core:1.5.18'
+    implementation 'ch.qos.logback:logback-classic:1.5.18'
 
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
     annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.6.0.Beta1'
@@ -87,14 +89,18 @@ dependencies {
 
     testImplementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.12'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.11.0-M1'
+    testImplementation group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '3.3.7'
     testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.20.5'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.12.0'
+    testImplementation 'org.testcontainers:mariadb:1.20.6'
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
     testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.11.0-M1'
     testImplementation 'org.hamcrest:hamcrest-junit:2.0.0.0'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
     testAnnotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.6.0.Beta1'
+    testImplementation 'ch.qos.logback:logback-classic:1.5.18'
+    testImplementation 'ch.qos.logback:logback-core:1.5.18'
 }
 
 test {

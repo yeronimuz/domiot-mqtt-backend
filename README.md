@@ -54,8 +54,8 @@ You could do this several ways. I installed mosquitto on
    and one on the Raspberry Pi at home. These two are bridged together.
 1. Configure the central Mosquitto as follows: In /etc/mosquitto/conf.d/default.conf:
 ```
-   allow_anonymous false
-   password_file /etc/mosquitto/passwd
+allow_anonymous false
+password_file /etc/mosquitto/passwd
 
 listener 1883 localhost
 

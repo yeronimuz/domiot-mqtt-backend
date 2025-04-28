@@ -37,7 +37,10 @@ public class DeviceService {
             updateDevice(deviceDto, deviceEntityStored);
             deviceEntityStored = repository.save(deviceEntityStored);
         } else {
-            deviceEntityStored = repository.save(deviceMapper.map(deviceDto));
+            DeviceEntity newDeviceEntity = deviceMapper.map(deviceDto);
+            newDeviceEntity.getSensors().forEach(sensorDto -> {sensorDto.setId(null);
+            sensorDto.setDeviceEntity(newDeviceEntity);});
+            deviceEntityStored = repository.save(newDeviceEntity);
         }
 
         return deviceMapper.map(deviceEntityStored);
