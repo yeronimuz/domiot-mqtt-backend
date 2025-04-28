@@ -91,6 +91,8 @@ dependencies {
 
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
     testAnnotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.6.0.Beta1'
+    testImplementation 'ch.qos.logback:logback-classic:1.5.18'
+    testImplementation 'ch.qos.logback:logback-core:1.5.18'
 }
 
 test {
