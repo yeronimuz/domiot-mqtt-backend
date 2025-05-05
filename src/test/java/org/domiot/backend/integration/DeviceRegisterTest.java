@@ -2,6 +2,7 @@ package org.domiot.backend.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ class DeviceRegisterTest extends DomiotBackendTestBase {
 
     @Test
     void registerAndReRegisterDeviceShouldStoreAndRespondWithSensorIds() throws Exception {
-        DeviceDto newDevice = createDeviceDto(0L);
+        DeviceDto newDevice = createDeviceDto(Collections.singletonList(0L));
         sendRegister(newDevice);
 
         DeviceDto config = receivedMessages.poll(10, TimeUnit.SECONDS);
@@ -31,7 +32,7 @@ class DeviceRegisterTest extends DomiotBackendTestBase {
         log.info("sensor id after registering: {}", sensorId);
 
         // Re-register
-        DeviceDto existingDevice = createDeviceDto(sensorId);
+        DeviceDto existingDevice = createDeviceDto(Collections.singletonList(sensorId));
         sendRegister(existingDevice);
 
         config = receivedMessages.poll(10, TimeUnit.SECONDS);
