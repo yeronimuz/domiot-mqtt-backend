@@ -63,6 +63,7 @@ class SensorValueStorageTest extends DomiotBackendTestBase {
         assertThat(config.getSensors()).isNotNull();
         assertThat(config.getSensors()).hasSize(sensorIds.size());
 
+        // sensorValue = 0.1 * sensorId
         sendSensorValue(1L, LocalDateTime.now(), 0.1);
         sendSensorValue(2L, LocalDateTime.now(), 0.2);
         sendSensorValue(3L, LocalDateTime.now(), 0.3);
@@ -70,23 +71,26 @@ class SensorValueStorageTest extends DomiotBackendTestBase {
         sendSensorValue(5L, LocalDateTime.now(), 0.5);
 
         List<SensorValueEntity> storedValues = getSensorValueEntities(sensorIds);
-        sensorIds.forEach((Long sensorId) -> {
-            storedValues.stream().filter(value -> value.getSensorId().equals(sensorId)).findFirst().ifPresent(storedValue -> {
-                assertThat(storedValue.getValue()).isCloseTo(sensorId * 0.1, within(1e-10));
-            });
-        });
+        assertThat(storedValues).hasSize(5);
+        for (Long sensorId : sensorIds) {
+            storedValues.stream().filter(value -> value.getSensorId().equals(sensorId))
+                    .findFirst()
+                    .ifPresent(storedValue -> assertThat(storedValue.getValue())
+                            .isCloseTo(sensorId * 0.1, within(1e-10)));
+        }
     }
 
     private List<SensorValueEntity> getSensorValueEntities(List<Long> sensorIds) {
-        List<SensorValueEntity> sensorValueEntities = new ArrayList<>();
-        sensorIds.forEach(sensorId -> {
-            sensorValueEntities.add(AwaitUtils.awaitOptional(
+        List<SensorValueEntity> list = new ArrayList<>();
+        for (Long sensorId : sensorIds) {
+            SensorValueEntity sensorValueEntity = AwaitUtils.awaitOptional(
                     () -> sensorValueRepository.findTopBySensorIdOrderByTimeStampDesc(sensorId),
                     Duration.ofSeconds(5),
                     Duration.ofMillis(200)
-            ));
-        });
-        return sensorValueEntities;
+            );
+            list.add(sensorValueEntity);
+        }
+        return list;
     }
 
 

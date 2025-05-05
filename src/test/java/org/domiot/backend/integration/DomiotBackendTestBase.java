@@ -2,14 +2,24 @@ package org.domiot.backend.integration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.domiot.backend.database.DeviceEntityRepository;
 import org.domiot.backend.database.SensorEntityRepository;
 import org.domiot.backend.database.SensorValueEntityRepository;
-import org.eclipse.paho.client.mqttv3.*;
-        import org.junit.jupiter.api.AfterAll;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.lankheet.domiot.domotics.dto.DeviceDto;
@@ -25,14 +35,6 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.utility.MountableFile;
 
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(properties = {
         "logging.config=classpath:logback-spring.xml"
@@ -47,11 +49,9 @@ public abstract class DomiotBackendTestBase {
 
     protected static final ObjectMapper objectMapper =
             new ObjectMapper().registerModule(new JavaTimeModule())
-            .configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+                    .configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
     protected static MqttClient mqttClient;
-
-    protected final String macAddress = UUID.randomUUID().toString();
 
     @Autowired
     protected MqttPahoClientFactory mqttClientFactory;
@@ -129,7 +129,7 @@ public abstract class DomiotBackendTestBase {
         }
 
         return DeviceDto.builder()
-                .macAddress(macAddress)
+                .macAddress(UUID.randomUUID().toString())
                 .sensors(sensorList)
                 .build();
     }
