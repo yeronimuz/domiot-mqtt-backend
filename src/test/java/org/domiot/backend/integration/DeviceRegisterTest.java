@@ -2,6 +2,7 @@ package org.domiot.backend.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -44,5 +45,31 @@ class DeviceRegisterTest extends DomiotBackendTestBase {
         sensorId = config.getSensors().get(0).getSensorId();
         assertThat(sensorId).isEqualTo(1L);
         log.info("sensor id after updating: {}", sensorId);
+    }
+
+    @Test
+    void registerMultipleDevicesShouldStoreAndRespondWithSensorIds() throws Exception {
+        DeviceDto device1 = createDeviceDto(Arrays.asList(0L, 0L));
+        DeviceDto device2 = createDeviceDto(Arrays.asList(0L, 0L));
+
+        sendRegister(device1);
+        DeviceDto config1 = receivedMessages.poll(10, TimeUnit.SECONDS);
+        sendRegister(device2);
+        DeviceDto config2 = receivedMessages.poll(10, TimeUnit.SECONDS);
+
+        assertThat(config1).isNotNull();
+        assertThat(config2).isNotNull();
+        log.info("config1: {}", config1);
+        log.info("config2: {}", config2);
+
+        assertThat(config1.getSensors()).isNotNull();
+        assertThat(config1.getSensors()).hasSize(2);
+        assertThat(config1.getSensors().get(0).getSensorId()).isEqualTo(1L);
+        assertThat(config1.getSensors().get(1).getSensorId()).isEqualTo(2L);
+
+        assertThat(config2.getSensors()).isNotNull();
+        assertThat(config2.getSensors()).hasSize(2);
+        assertThat(config2.getSensors().get(0).getSensorId()).isEqualTo(3L);
+        assertThat(config2.getSensors().get(1).getSensorId()).isEqualTo(4L);
     }
 }
