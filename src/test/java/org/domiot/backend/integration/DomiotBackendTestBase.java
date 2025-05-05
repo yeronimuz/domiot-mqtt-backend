@@ -27,6 +27,7 @@ import org.testcontainers.utility.MountableFile;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
@@ -40,7 +41,7 @@ public abstract class DomiotBackendTestBase {
     protected static final int MQTT_PORT = 1883;
     protected static final String CONFIG_TOPIC = "config";
     protected static final String REGISTER_TOPIC = "register";
-    protected static final String SENSOR_VALUE_TOPIC = "sensor";
+    protected static final String SENSOR_VALUE_TOPIC = "sensor/meterbox/ct2";
 
     protected static final BlockingQueue<DeviceDto> receivedMessages = new LinkedBlockingQueue<>();
 
@@ -116,13 +117,20 @@ public abstract class DomiotBackendTestBase {
         mariadb.stop();
     }
 
-    protected DeviceDto createDeviceDto(long sensorId) {
+    protected DeviceDto createDeviceDto(List<Long> sensorIdList) {
+        List<SensorDto> sensorList = new ArrayList<>();
+        SensorTypeDto[] types = SensorTypeDto.values();
+
+        for (int i = 0; i < sensorIdList.size(); i++) {
+            sensorList.add(SensorDto.builder()
+                    .sensorId(sensorIdList.get(i))
+                    .sensorType(types[i % types.length]) // wrap around if more IDs than types
+                    .build());
+        }
+
         return DeviceDto.builder()
                 .macAddress(macAddress)
-                .sensors(List.of(SensorDto.builder()
-                        .sensorId(sensorId)
-                        .sensorType(SensorTypeDto.GAS_SENSOR)
-                        .build()))
+                .sensors(sensorList)
                 .build();
     }
 

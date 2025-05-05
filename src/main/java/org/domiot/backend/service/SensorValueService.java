@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SensorValueService {
     private final SensorValueEntityRepository sensorValueEntityRepository;
-//    @Qualifier("sensorValueDtoMapperImpl")
     private final SensorValueDtoMapper sensorValueMapper;
     private final Queue<SensorValueEntity> buffer = new LinkedList<>();
 
