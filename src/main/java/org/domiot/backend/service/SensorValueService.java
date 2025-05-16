@@ -37,6 +37,7 @@ public class SensorValueService {
      */
     @Retryable(maxAttempts = 40, backoff = @Backoff(delay = 2000))
     public SensorValueDto saveSensorValue(SensorValueDto sensorValueDto) {
+        log.debug("save sensor value {}", sensorValueDto);
         SensorValueEntity sensorValueEntity = sensorValueMapper.map(sensorValueDto);
         SensorValueEntity savedSensorValue = null;
         try {

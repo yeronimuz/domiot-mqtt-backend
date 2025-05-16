@@ -1,4 +1,4 @@
-package org.domiot.backend.integration;
+package org.domiot.backend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -28,7 +28,7 @@ import org.lankheet.domiot.entities.SensorValueEntity;
 class SensorValueStorageTest extends DomiotBackendTestBase {
     @Test
     void testSensorValueStorage() throws Exception {
-        DeviceDto newDevice = createDeviceDto(Collections.singletonList(0L));
+        DeviceDto newDevice = createDeviceDto("00:11:22:33:44:55:66", Collections.singletonList(0L));
         sendRegister(newDevice);
 
         DeviceDto config = receivedMessages.poll(10, TimeUnit.SECONDS);
@@ -53,7 +53,7 @@ class SensorValueStorageTest extends DomiotBackendTestBase {
     @Test
     void testMultipleSensorsValueStorage() throws Exception {
         List<Long> sensorIds = Arrays.asList(1L, 2L, 3L, 4L, 5L);
-        DeviceDto newDevice = createDeviceDto(sensorIds);
+        DeviceDto newDevice = createDeviceDto("AA:BB:CC:DD:EE:FF", sensorIds);
         sendRegister(newDevice);
 
         DeviceDto config = receivedMessages.poll(10, TimeUnit.SECONDS);

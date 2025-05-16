@@ -1,4 +1,4 @@
-package org.domiot.backend.integration;
+package org.domiot.backend;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -6,10 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -18,16 +18,19 @@ import org.domiot.backend.database.SensorEntityRepository;
 import org.domiot.backend.database.SensorValueEntityRepository;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.lankheet.domiot.domotics.dto.DeviceDto;
 import org.lankheet.domiot.domotics.dto.SensorDto;
 import org.lankheet.domiot.domotics.dto.SensorTypeDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -40,6 +43,7 @@ import org.testcontainers.utility.MountableFile;
         "logging.config=classpath:logback-spring.xml"
 })
 public abstract class DomiotBackendTestBase {
+    protected static Logger log = LoggerFactory.getLogger(DomiotBackendTestBase.class);
     protected static final int MQTT_PORT = 1883;
     protected static final String CONFIG_TOPIC = "config";
     protected static final String REGISTER_TOPIC = "register";
@@ -52,9 +56,6 @@ public abstract class DomiotBackendTestBase {
                     .configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
     protected static MqttClient mqttClient;
-
-    @Autowired
-    protected MqttPahoClientFactory mqttClientFactory;
 
     @Autowired
     protected DeviceEntityRepository deviceRepository;
@@ -110,14 +111,22 @@ public abstract class DomiotBackendTestBase {
     }
 
     @AfterAll
-    static void afterAll() throws Exception {
+    static void afterAll() throws MqttException {
+        log.debug("Cleaning up afterAll");
         mqttClient.disconnect();
         mqttClient.close();
         mosquitto.stop();
         mariadb.stop();
     }
 
-    protected DeviceDto createDeviceDto(List<Long> sensorIdList) {
+    @BeforeEach
+    void beforeEach() {
+        log.debug("Before each: deleteDevices and Sensors");
+        deviceRepository.deleteAll();
+        sensorRepository.deleteAll();
+    }
+
+    protected DeviceDto createDeviceDto(String macAddress, List<Long> sensorIdList) {
         List<SensorDto> sensorList = new ArrayList<>();
         SensorTypeDto[] types = SensorTypeDto.values();
 
@@ -129,12 +138,12 @@ public abstract class DomiotBackendTestBase {
         }
 
         return DeviceDto.builder()
-                .macAddress(UUID.randomUUID().toString())
+                .macAddress(macAddress)
                 .sensors(sensorList)
                 .build();
     }
 
-    protected void sendRegister(DeviceDto deviceDto) throws Exception {
+    protected void sendRegister(DeviceDto deviceDto) throws MqttException, JsonProcessingException {
         String json = objectMapper.writeValueAsString(deviceDto);
         mqttClient.publish(REGISTER_TOPIC, new MqttMessage(json.getBytes(StandardCharsets.UTF_8)));
     }
