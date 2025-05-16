@@ -8,6 +8,7 @@ import org.awaitility.Awaitility;
 
 public class AwaitUtils {
 
+    private AwaitUtils() {}
     /**
      * Waits until the provided supplier returns a non-empty Optional and returns the contained value.
      *
