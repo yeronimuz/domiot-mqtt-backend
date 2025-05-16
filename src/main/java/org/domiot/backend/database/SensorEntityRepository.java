@@ -1,14 +1,12 @@
 package org.domiot.backend.database;
 
-import org.lankheet.domiot.entities.DeviceEntity;
 import org.lankheet.domiot.entities.SensorEntity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * JPA Repository for {@link DeviceEntity}
+ * JPA Repository for {@link SensorEntity}
  */
 @Repository
-public interface SensorEntityRepository extends CrudRepository<SensorEntity, Long> {
-    SensorEntity findDistinctByNameAndSensorTypeValue(String name, int type);
+public interface SensorEntityRepository extends JpaRepository<SensorEntity, Long> {
 }

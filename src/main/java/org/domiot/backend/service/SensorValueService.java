@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SensorValueService {
     private final SensorValueEntityRepository sensorValueEntityRepository;
-//    @Qualifier("sensorValueDtoMapperImpl")
     private final SensorValueDtoMapper sensorValueMapper;
     private final Queue<SensorValueEntity> buffer = new LinkedList<>();
 
@@ -38,6 +37,7 @@ public class SensorValueService {
      */
     @Retryable(maxAttempts = 40, backoff = @Backoff(delay = 2000))
     public SensorValueDto saveSensorValue(SensorValueDto sensorValueDto) {
+        log.debug("save sensor value {}", sensorValueDto);
         SensorValueEntity sensorValueEntity = sensorValueMapper.map(sensorValueDto);
         SensorValueEntity savedSensorValue = null;
         try {
