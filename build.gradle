@@ -43,11 +43,6 @@ publishing {
     }
 }
 
-// TODO: Remove docker files from jar
-//configurations {
-//    compile.exclude module: 'spring-boot-starter-logging'
-//}
-
 ext {
     springBootVersion = '3.4.4'
 }
@@ -99,7 +94,7 @@ dependencies {
 }
 
 test {
-    // Workaround for using Gradle as executor of your unit tests
+    // Workaround for using Gradle as executor of unit tests
     useJUnitPlatform()
     ignoreFailures = !project.hasProperty('release')
     finalizedBy jacocoTestReport // report is always generated after tests run
@@ -112,8 +107,6 @@ sourceSets {
             compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
             runtimeClasspath += output + compileClasspath
             java.srcDir file('src/integrationTest/java')
-
-//        resources.srcDir file('src/integrationTest/resources')
     }
 }
 
@@ -122,8 +115,6 @@ tasks.register('integrationTest', Test) {
     group = 'verification'
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
-    shouldRunAfter test
-    useJUnitPlatform()
 }
 
 configurations {
@@ -146,11 +137,6 @@ sonarqube {
 jacoco {
     toolVersion = "0.8.8"
 }
-
-//jacocoTestReport {
-//    dependsOn test // tests are required to run before generating the report
-//    dependsOn integrationTest
-//}
 
 jacocoTestReport {
     reports {
