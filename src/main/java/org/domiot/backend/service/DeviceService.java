@@ -37,12 +37,15 @@ public class DeviceService {
     public DeviceDto saveDevice(DeviceDto deviceDto) {
         DeviceEntity deviceEntityStored = repository.findByMacAddress(deviceDto.getMacAddress());
         if (deviceEntityStored == null) {
+            log.debug("Creating new device");
             DeviceEntity newDeviceEntity = deviceMapper.map(deviceDto);
             newDeviceEntity.getSensors().forEach(sensorDto -> {
                 sensorDto.setId(null);
                 sensorDto.setDeviceEntity(newDeviceEntity);
             });
             deviceEntityStored = repository.save(newDeviceEntity);
+        } else {
+            log.debug("Existing device");
         }
 
         return deviceMapper.map(deviceEntityStored);

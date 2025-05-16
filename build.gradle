@@ -91,8 +91,6 @@ dependencies {
 
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
     testAnnotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.6.0.Beta1'
-    testImplementation 'ch.qos.logback:logback-classic:1.5.18'
-    testImplementation 'ch.qos.logback:logback-core:1.5.18'
 }
 
 test {
@@ -139,6 +137,32 @@ sonarqube {
 jacoco {
     toolVersion = "0.8.8"
 }
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+sonarqube {
+    properties {
+        property "sonar.sources", "src/main/java"
+        property "sonar.tests", "src/test/java,src/integrationTest/java"
+        property "sonar.java.test.includes", "**/*Test.java,**/*IT.java"
+        property "sonar.junit.reportPaths", "build/test-results/test,build/test-results/integrationTest"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/integrationTest.exec"
+    }
+}
+
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+//jacocoTestReport {
+//    dependsOn test // tests are required to run before generating the report
+//    dependsOn integrationTest
+//}
 
 jacocoTestReport {
     reports {
