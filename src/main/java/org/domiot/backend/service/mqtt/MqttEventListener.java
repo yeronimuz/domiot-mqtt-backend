@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.integration.mqtt.event.MqttConnectionFailedEvent;
 import org.springframework.integration.mqtt.event.MqttIntegrationEvent;
+import org.springframework.integration.mqtt.event.MqttSubscribedEvent;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -13,6 +14,9 @@ public class MqttEventListener implements ApplicationListener<MqttIntegrationEve
     public void onApplicationEvent(MqttIntegrationEvent event) {
         if (event instanceof MqttConnectionFailedEvent) {
             log.error("mqtt connection failed: {}", event);
+        }
+        if (event instanceof MqttSubscribedEvent subscribedEvent) {
+            log.info("mqtt subscription established: message='{}'", subscribedEvent.getMessage());
         }
         log.info("MqttIntegrationEvent: {}", event);
     }
