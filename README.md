@@ -1,8 +1,18 @@
 # domiot-backend
 
-* Subscribe to all data from an MQTT broker
-* Convert measurements to an hourly, daily, monthly graph. This conversion will be scheduled periodically.
+* Subscribe to all data from sensors handled by an MQTT broker
 * Register new devices and provide feedback about sensor id's and configuration parameters.
+
+## registration
+* The device reports itself without deviceId and sensorIds and uses the 'register' subject.
+* Backend stores device with all known info (at least brand, model, hardware and firmware version) and stores all sensors (types are known to the backend)
+* Backend publishes the new configuration including the deviceId and sensorId(s) on the 'config' topic.
+
+Exceptions: 
+* Device already known: Just update hardware and firmware version (in case an update was finished)
+* Sensor already known: Just return the sensor information
+
+Rationale: Further sensor and device information should be managed by the management interface (responsibility of the webservice)
 
 ## Starting the service
 
@@ -30,15 +40,11 @@ It converts Entities to REST objects for use in the frontend or MTM communicatio
 The following items are required:
 
 * An mqtt message broker, like mosquitto
-* Docker
 * Some mqtt devices
 
 ## Simple setup
 
-## Remote setup
-
-In this setup all devices and an mqtt message broker are running locally and a bridged one is running remotely. All
-other services have to be running in the cloud.
+TODO
 
 # Installing mosquitto
 
@@ -48,8 +54,8 @@ You could do this several ways. I installed mosquitto on
    and one on the Raspberry Pi at home. These two are bridged together.
 1. Configure the central Mosquitto as follows: In /etc/mosquitto/conf.d/default.conf:
 ```
-   allow_anonymous false
-   password_file /etc/mosquitto/passwd
+allow_anonymous false
+password_file /etc/mosquitto/passwd
 
 listener 1883 localhost
 
@@ -98,8 +104,9 @@ docker push yeronimuz/domiot-mqtt-backend:tagname
 
 # What's next?
 * Database robustness, reconnection ability.
-* Storing data locally while no database connection is possible
+* Storing data locally (Redis) while no database connection is possible
 * Database health check
+* MQTT broker health check
 
 
 ## misc code snippets
