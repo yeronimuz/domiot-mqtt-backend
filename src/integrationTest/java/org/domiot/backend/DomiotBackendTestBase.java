@@ -48,6 +48,8 @@ public abstract class DomiotBackendTestBase {
     protected static final String CONFIG_TOPIC = "config";
     protected static final String REGISTER_TOPIC = "register";
     protected static final String SENSOR_VALUE_TOPIC = "sensor/meterbox/ct2";
+    protected static final String MQTT_USERNAME = "johndoe";
+    protected static final String MQTT_PASSWORD = "noaccess";
 
     protected static final BlockingQueue<DeviceDto> receivedMessages = new LinkedBlockingQueue<>();
 
@@ -87,8 +89,8 @@ public abstract class DomiotBackendTestBase {
 
         registry.add("mqtt.url", () -> "tcp://localhost:" + mosquitto.getMappedPort(MQTT_PORT));
         registry.add("mqtt.clientId", () -> "test-client");
-        registry.add("mqtt.username", () -> "johndoe");
-        registry.add("mqtt.password", () -> "noaccess");
+        registry.add("mqtt.username", () -> MQTT_USERNAME);
+        registry.add("mqtt.password", () -> MQTT_PASSWORD);
     }
 
     @BeforeAll
@@ -100,8 +102,8 @@ public abstract class DomiotBackendTestBase {
         MqttConnectOptions options = new MqttConnectOptions();
         options.setAutomaticReconnect(true);
         options.setCleanSession(true);
-        options.setUserName("johndoe");
-        options.setPassword("noaccess".toCharArray());
+        options.setUserName(MQTT_USERNAME);
+        options.setPassword(MQTT_PASSWORD.toCharArray());
         mqttClient.connect(options);
 
         mqttClient.subscribe(CONFIG_TOPIC, (topic, msg) -> {

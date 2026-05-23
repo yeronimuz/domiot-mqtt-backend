@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -38,7 +39,7 @@ class SensorValueStorageTest extends DomiotBackendTestBase {
         assertThat(config.getSensors()).hasSize(1);
 
         long sensorId = config.getSensors().get(0).getSensorId();
-        assertThat(sensorId).isEqualTo(1L);
+        assertThat(sensorId).isPositive();
 
         sendSensorValue(sensorId, LocalDateTime.now(), 0.1);
 
@@ -63,16 +64,18 @@ class SensorValueStorageTest extends DomiotBackendTestBase {
         assertThat(config.getSensors()).isNotNull();
         assertThat(config.getSensors()).hasSize(sensorIds.size());
 
-        // sensorValue = 0.1 * sensorId
-        sendSensorValue(1L, LocalDateTime.now(), 0.1);
-        sendSensorValue(2L, LocalDateTime.now(), 0.2);
-        sendSensorValue(3L, LocalDateTime.now(), 0.3);
-        sendSensorValue(4L, LocalDateTime.now(), 0.4);
-        sendSensorValue(5L, LocalDateTime.now(), 0.5);
+        List<Long> configuredSensorIds = config.getSensors().stream()
+                .map(sensor -> sensor.getSensorId())
+                .collect(Collectors.toList());
 
-        List<SensorValueEntity> storedValues = getSensorValueEntities(sensorIds);
+        // sensorValue = 0.1 * sensorId
+        for (Long sensorId : configuredSensorIds) {
+            sendSensorValue(sensorId, LocalDateTime.now(), sensorId * 0.1);
+        }
+
+        List<SensorValueEntity> storedValues = getSensorValueEntities(configuredSensorIds);
         assertThat(storedValues).hasSize(5);
-        for (Long sensorId : sensorIds) {
+        for (Long sensorId : configuredSensorIds) {
             storedValues.stream().filter(value -> value.getSensorId().equals(sensorId))
                     .findFirst()
                     .ifPresent(storedValue -> assertThat(storedValue.getValue())

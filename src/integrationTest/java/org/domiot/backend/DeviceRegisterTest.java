@@ -59,7 +59,6 @@ class DeviceRegisterTest extends DomiotBackendTestBase {
 
         sendRegister(device1);
         DeviceDto config1 = receivedMessages.poll(10, TimeUnit.SECONDS);
-        Thread.sleep(100);
         sendRegister(device2);
         DeviceDto config2 = receivedMessages.poll(10, TimeUnit.SECONDS);
 
@@ -70,12 +69,22 @@ class DeviceRegisterTest extends DomiotBackendTestBase {
 
         assertThat(config1.getSensors()).isNotNull();
         assertThat(config1.getSensors()).hasSize(2);
-        assertThat(config1.getSensors().get(0).getSensorId()).isGreaterThan(0L);
-        assertThat(config1.getSensors().get(1).getSensorId()).isGreaterThan(0L);
+        long device1SensorId1 = config1.getSensors().get(0).getSensorId();
+        long device1SensorId2 = config1.getSensors().get(1).getSensorId();
+        assertThat(device1SensorId1).isGreaterThan(0L);
+        assertThat(device1SensorId2).isGreaterThan(0L);
+        assertThat(device1SensorId1).isNotEqualTo(device1SensorId2);
 
         assertThat(config2.getSensors()).isNotNull();
         assertThat(config2.getSensors()).hasSize(2);
-        assertThat(config2.getSensors().get(0).getSensorId()).isGreaterThan(2L);
-        assertThat(config2.getSensors().get(1).getSensorId()).isGreaterThan(3L);
+        long device2SensorId1 = config2.getSensors().get(0).getSensorId();
+        long device2SensorId2 = config2.getSensors().get(1).getSensorId();
+        assertThat(device2SensorId1).isGreaterThan(0L);
+        assertThat(device2SensorId2).isGreaterThan(0L);
+        assertThat(device2SensorId1).isNotEqualTo(device2SensorId2);
+
+        // Ensure that sensor IDs of device2 do not overlap with those of device1
+        assertThat(device2SensorId1).isNotIn(device1SensorId1, device1SensorId2);
+        assertThat(device2SensorId2).isNotIn(device1SensorId1, device1SensorId2);
     }
 }
