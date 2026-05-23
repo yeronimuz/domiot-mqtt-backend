@@ -1,7 +1,7 @@
 package org.domiot.backend.service;
 
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import jakarta.annotation.PreDestroy;
 
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 public class SensorValueService {
     private final SensorValueEntityRepository sensorValueEntityRepository;
     private final SensorValueDtoMapper sensorValueMapper;
-    private final Queue<SensorValueEntity> buffer = new LinkedList<>();
+    private final Queue<SensorValueEntity> buffer = new ConcurrentLinkedQueue<>();
 
     /**
      * Save a new sensorValue

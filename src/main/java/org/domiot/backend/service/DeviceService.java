@@ -39,9 +39,9 @@ public class DeviceService {
         if (deviceEntityStored == null) {
             log.debug("Creating new device");
             DeviceEntity newDeviceEntity = deviceMapper.map(deviceDto);
-            newDeviceEntity.getSensors().forEach(sensorDto -> {
-                sensorDto.setId(null);
-                sensorDto.setDeviceEntity(newDeviceEntity);
+            newDeviceEntity.getSensors().forEach(sensorEntity -> {
+                sensorEntity.setId(null);
+                sensorEntity.setDeviceEntity(newDeviceEntity);
             });
             deviceEntityStored = repository.save(newDeviceEntity);
         } else {
