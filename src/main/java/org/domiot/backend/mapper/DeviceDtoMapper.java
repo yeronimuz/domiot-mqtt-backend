@@ -1,7 +1,7 @@
 package org.domiot.backend.mapper;
 
-import org.lankheet.domiot.domotics.dto.DeviceDto;
-import org.lankheet.domiot.entities.DeviceEntity;
+import org.domiot.dto.DeviceDto;
+import org.domiot.entities.DeviceEntity;
 import org.mapstruct.Mapper;
 
 /**

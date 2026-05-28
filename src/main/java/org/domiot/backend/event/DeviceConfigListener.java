@@ -3,12 +3,10 @@ package org.domiot.backend.event;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.domiot.backend.service.mqtt.DomiotMqttGateway;
-import org.lankheet.domiot.domotics.dto.DeviceDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.domiot.dto.DeviceDto;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -20,10 +18,13 @@ import org.springframework.stereotype.Component;
  * This event listener responds to the events emitted.
  */
 public class DeviceConfigListener implements ApplicationListener<DeviceConfigEvent> {
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public DeviceConfigListener(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Override
     public void onApplicationEvent(DeviceConfigEvent event) {

@@ -1,6 +1,6 @@
 package org.domiot.backend.mapper;
 
-import org.lankheet.domiot.domotics.dto.SensorTypeDto;
+import org.domiot.dto.SensorTypeDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

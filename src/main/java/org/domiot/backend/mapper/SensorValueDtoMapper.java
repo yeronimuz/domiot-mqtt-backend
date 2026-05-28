@@ -1,7 +1,7 @@
 package org.domiot.backend.mapper;
 
-import org.lankheet.domiot.domotics.dto.SensorValueDto;
-import org.lankheet.domiot.entities.SensorValueEntity;
+import org.domiot.dto.SensorValueDto;
+import org.domiot.entities.SensorValueEntity;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 

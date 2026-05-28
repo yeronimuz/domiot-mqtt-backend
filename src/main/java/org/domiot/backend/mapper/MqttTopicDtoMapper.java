@@ -1,7 +1,7 @@
 package org.domiot.backend.mapper;
 
-import org.lankheet.domiot.domotics.dto.MqttTopicDto;
-import org.lankheet.domiot.entities.MqttTopicEntity;
+import org.domiot.dto.MqttTopicDto;
+import org.domiot.entities.MqttTopicEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

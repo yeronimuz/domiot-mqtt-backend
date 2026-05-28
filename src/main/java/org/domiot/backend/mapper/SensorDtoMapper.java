@@ -1,8 +1,8 @@
 package org.domiot.backend.mapper;
 import java.util.List;
 
-import org.lankheet.domiot.domotics.dto.SensorDto;
-import org.lankheet.domiot.entities.SensorEntity;
+import org.domiot.dto.SensorDto;
+import org.domiot.entities.SensorEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

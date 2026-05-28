@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {"org.domiot.backend.database", "org.lankheet.domiot.entities"})
+@EnableJpaRepositories(basePackages = {"org.domiot.backend.database", "org.domiot.entities"})
 @ComponentScan(basePackages = "org.domiot.backend")
-@EntityScan("org.lankheet.domiot.entities")
+@EntityScan("org.domiot.entities")
 class AppConfig {
 }

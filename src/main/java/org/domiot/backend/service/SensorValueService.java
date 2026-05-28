@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.domiot.backend.database.SensorValueEntityRepository;
 import org.domiot.backend.mapper.SensorValueDtoMapper;
-import org.lankheet.domiot.domotics.dto.SensorValueDto;
-import org.lankheet.domiot.entities.SensorValueEntity;
+import org.domiot.dto.SensorValueDto;
+import org.domiot.entities.SensorValueEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -54,7 +54,7 @@ public class SensorValueService {
         while (!buffer.isEmpty()) {
             try {
                 sensorValueEntityRepository.save(buffer.poll());
-            } catch (Exception e) {
+            } catch (Exception exception) {
                 // If it fails, break and try again in the next flush
                 break;
             }

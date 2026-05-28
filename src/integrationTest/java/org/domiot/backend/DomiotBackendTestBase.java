@@ -16,6 +16,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.domiot.backend.database.DeviceEntityRepository;
 import org.domiot.backend.database.SensorEntityRepository;
 import org.domiot.backend.database.SensorValueEntityRepository;
+import org.domiot.dto.DeviceDto;
+import org.domiot.dto.SensorDto;
+import org.domiot.dto.SensorTypeDto;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -24,9 +27,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.lankheet.domiot.domotics.dto.DeviceDto;
-import org.lankheet.domiot.domotics.dto.SensorDto;
-import org.lankheet.domiot.domotics.dto.SensorTypeDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,19 +57,23 @@ public abstract class DomiotBackendTestBase {
 
     protected static MqttClient mqttClient;
 
-    @Autowired
     protected DeviceEntityRepository deviceRepository;
 
-    @Autowired
     protected SensorEntityRepository sensorRepository;
 
-    @Autowired
     protected SensorValueEntityRepository sensorValueRepository;
 
     protected static final MariaDBContainer<?> mariadb = new MariaDBContainer<>("mariadb:10.6")
             .withDatabaseName("domiot")
             .withUsername("domiot")
             .withPassword("domiot");
+
+    @Autowired
+    protected DomiotBackendTestBase(DeviceEntityRepository deviceRepository, SensorEntityRepository sensorRepository, SensorValueEntityRepository sensorValueRepository) {
+        this.deviceRepository = deviceRepository;
+        this.sensorRepository = sensorRepository;
+        this.sensorValueRepository = sensorValueRepository;
+    }
 
     protected static final GenericContainer<?> mosquitto = new GenericContainer<>("eclipse-mosquitto:2.0")
             .withExposedPorts(MQTT_PORT)

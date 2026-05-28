@@ -12,9 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.domiot.backend.event.DeviceConfigEvent;
 import org.domiot.backend.service.DeviceService;
 import org.domiot.backend.service.SensorValueService;
-import org.lankheet.domiot.domotics.dto.DeviceDto;
-import org.lankheet.domiot.domotics.dto.SensorValueDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.domiot.dto.DeviceDto;
+import org.domiot.dto.SensorValueDto;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.dsl.IntegrationFlow;
@@ -24,12 +23,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class MqttMessageHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    @Autowired
-    private SensorValueService sensorValueService;
-    @Autowired
-    private DeviceService deviceService;
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
+    private final SensorValueService sensorValueService;
+    private final DeviceService deviceService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public MqttMessageHandler(SensorValueService sensorValueService, DeviceService deviceService, ApplicationEventPublisher eventPublisher) {
         this.sensorValueService = sensorValueService;
@@ -82,6 +78,6 @@ public class MqttMessageHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        SensorValueDto sensorValueDtoSaved = sensorValueService.saveSensorValue(sensorValue);
+        sensorValueService.saveSensorValue(sensorValue);
     }
 }

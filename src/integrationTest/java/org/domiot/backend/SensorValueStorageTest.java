@@ -16,16 +16,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.domiot.backend.database.DeviceEntityRepository;
+import org.domiot.backend.database.SensorEntityRepository;
+import org.domiot.backend.database.SensorValueEntityRepository;
 import org.domiot.backend.utils.AwaitUtils;
+import org.domiot.dto.DeviceDto;
+import org.domiot.dto.SensorValueDto;
+import org.domiot.entities.SensorValueEntity;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.junit.jupiter.api.Test;
-import org.lankheet.domiot.domotics.dto.DeviceDto;
-import org.lankheet.domiot.domotics.dto.SensorValueDto;
-import org.lankheet.domiot.entities.SensorValueEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
 class SensorValueStorageTest extends DomiotBackendTestBase {
+
+    @Autowired
+    public SensorValueStorageTest(DeviceEntityRepository deviceRepository, SensorEntityRepository sensorRepository, SensorValueEntityRepository sensorValueRepository) {
+        super(deviceRepository, sensorRepository, sensorValueRepository);
+    }
+
     @Test
     void testSensorValueStorage() throws Exception {
         DeviceDto newDevice = createDeviceDto("00:11:22:33:44:55:66", Collections.singletonList(0L));

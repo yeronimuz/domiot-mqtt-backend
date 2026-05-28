@@ -11,7 +11,7 @@ buildscript {
 plugins {
     id 'io.freefair.lombok' version '8.6' // Apply lombok to all source sets
     id 'com.github.johnrengelman.shadow' version '7.1.2'
-    id 'org.springframework.boot' version '3.2.3'
+    id 'org.springframework.boot' version '3.5.11'
     id 'io.spring.dependency-management' version '1.1.7'
 
     id 'java'
@@ -26,12 +26,12 @@ repositories {
 }
 
 java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(23)
+    }
     withSourcesJar()
     withJavadocJar()
 }
-
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
 
 publishing {
     publications {
@@ -44,54 +44,53 @@ publishing {
 }
 
 ext {
-    springBootVersion = '3.5.8'
+    springBootVersion = '3.5.11'
     set('testcontainers.version', '1.21.4')
 }
 
 dependencies {
-    implementation group: 'org.lankheet.domiot', name: 'domiot-datatypes', version: '0.8.2-SNAPSHOT'
-    implementation group: 'org.lankheet.domiot', name: 'domiot-rest-api', version: '1.2.0-SNAPSHOT'
+    implementation "org.domiot:domiot-datatypes:0.10.0-SNAPSHOT"
+    implementation "org.domiot:domiot-rest-api:1.4.0-SNAPSHOT"
     implementation "org.springframework.data:spring-data-jpa:$springBootVersion"
     implementation "org.springframework.data:spring-data-commons:$springBootVersion"
-    implementation group: 'org.springframework.integration', name: 'spring-integration-mqtt', version: '6.3.7'
-    implementation group: 'org.springframework.integration', name: 'spring-integration-jmx', version: '6.3.7'
-    implementation group: 'org.springframework.integration', name: 'spring-integration-core', version: '6.3.7'
+    implementation "org.springframework.integration:spring-integration-mqtt:6.3.7"
+    implementation "org.springframework.integration:spring-integration-jmx:6.3.7"
+    implementation "org.springframework.integration:spring-integration-core:6.3.7"
     implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "$springBootVersion"
-    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.3.3'
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5', version: '2.20.1'
-    implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-jakarta-xmlbind-annotations', version: '2.20.1'
-    implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0-rc1')
-    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.6.0.Beta1'
-    implementation group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.6.0.Beta1'
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
-    implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
-    implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
-    implementation 'ch.qos.logback:logback-core:1.5.25'
-    implementation 'ch.qos.logback:logback-classic:1.5.25'
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+    implementation "org.mariadb.jdbc:mariadb-java-client:3.3.3"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.20.1"
+    implementation "com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:2.20.1"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0-rc1"
+    implementation "org.mapstruct:mapstruct:1.6.0.Beta1"
+    implementation "org.mapstruct:mapstruct-processor:1.6.0.Beta1"
+    compileOnly "org.projectlombok:lombok:1.18.32"
+    implementation "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+    implementation "javax.xml.bind:jaxb-api:2.4.0-b180830.0359"
+    implementation "ch.qos.logback:logback-core:1.5.25"
+    implementation "ch.qos.logback:logback-classic:1.5.25"
 
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.6.0.Beta1'
-//    implementation group: 'org.flywaydb', name: 'flyway-mysql', version: '10.0.1'
-//    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    annotationProcessor "org.projectlombok:lombok:1.18.32"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.6.0.Beta1"
+    //    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 
-    testImplementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.12'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.11.0-M1'
-    testImplementation group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
-    testImplementation "org.springframework.boot:spring-boot-starter-test:3.5.11"
-    testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.21.4'
-    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.12.0'
-    testImplementation 'org.testcontainers:mariadb:1.21.4'
-    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
-    testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.11.0-M1'
-    testImplementation 'org.hamcrest:hamcrest-junit:2.0.0.0'
-    testImplementation 'ch.qos.logback:logback-classic:1.5.25'
-    testImplementation 'ch.qos.logback:logback-core:1.5.25'
+    testImplementation "org.slf4j:slf4j-api:2.0.12"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.11.0-M1"
+    testImplementation "org.projectlombok:lombok:1.18.32"
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testImplementation "org.testcontainers:junit-jupiter:1.21.4"
+    testImplementation "org.mockito:mockito-junit-jupiter:5.12.0"
+    testImplementation "org.testcontainers:mariadb:1.21.4"
+    testImplementation "org.mockito:mockito-inline:5.2.0"
+    testImplementation "org.junit.platform:junit-platform-runner:1.11.0-M1"
+    testImplementation "org.hamcrest:hamcrest-junit:2.0.0.0"
+    testImplementation "ch.qos.logback:logback-classic:1.5.25"
+    testImplementation "ch.qos.logback:logback-core:1.5.25"
 
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
-    testAnnotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.6.0.Beta1'
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.32"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.6.0.Beta1"
 }
 
 test {
@@ -126,6 +125,7 @@ configurations {
 
 sonarqube {
     properties {
+        property "sonar.gradle.skipCompile", "true"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java,src/integrationTest/java"
         property "sonar.java.test.includes", "**/*Test.java,**/*IT.java"
@@ -133,6 +133,11 @@ sonarqube {
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/integrationTest.exec"
     }
+}
+
+javadoc {
+    exclude '**/generated/**'
+    options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 

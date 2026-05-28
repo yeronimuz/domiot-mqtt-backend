@@ -6,16 +6,27 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+import org.domiot.backend.database.DeviceEntityRepository;
+import org.domiot.backend.database.SensorEntityRepository;
+import org.domiot.backend.database.SensorValueEntityRepository;
+import org.domiot.dto.DeviceDto;
 import org.junit.jupiter.api.Test;
-import org.lankheet.domiot.domotics.dto.DeviceDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Unit integration test for device registration
  */
 class DeviceRegisterTest extends DomiotBackendTestBase {
     protected static Logger log = LoggerFactory.getLogger(DeviceRegisterTest.class);
+
+    @Autowired
+    DeviceRegisterTest(DeviceEntityRepository deviceRepository,
+                       SensorEntityRepository sensorRepository,
+                       SensorValueEntityRepository sensorValueRepository) {
+        super(deviceRepository, sensorRepository, sensorValueRepository);
+    }
 
     @Test
     void registerAndReRegisterDeviceShouldStoreAndRespondWithSensorIds() throws Exception {

@@ -1,6 +1,6 @@
 package org.domiot.backend.database;
 
-import org.lankheet.domiot.entities.DeviceEntity;
+import org.domiot.entities.DeviceEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

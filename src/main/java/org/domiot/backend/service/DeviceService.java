@@ -4,10 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.domiot.backend.database.DeviceEntityRepository;
 import org.domiot.backend.mapper.DeviceDtoMapper;
-import org.domiot.backend.mapper.DomiotParameterDtoMapper;
-import org.domiot.backend.mapper.SensorDtoMapper;
-import org.lankheet.domiot.domotics.dto.DeviceDto;
-import org.lankheet.domiot.entities.DeviceEntity;
+import org.domiot.dto.DeviceDto;
+import org.domiot.entities.DeviceEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,14 +16,10 @@ import org.springframework.stereotype.Service;
 public class DeviceService {
     private final DeviceEntityRepository repository;
     private final DeviceDtoMapper deviceMapper;
-    private final SensorDtoMapper sensorMapper;
-    private final DomiotParameterDtoMapper domiotParameterDtoMapper;
 
-    public DeviceService(DeviceEntityRepository repository, DeviceDtoMapper deviceMapper, SensorDtoMapper sensorMapper, DomiotParameterDtoMapper domiotParameterDtoMapper) {
+    public DeviceService(DeviceEntityRepository repository, DeviceDtoMapper deviceMapper) {
         this.repository = repository;
         this.deviceMapper = deviceMapper;
-        this.sensorMapper = sensorMapper;
-        this.domiotParameterDtoMapper = domiotParameterDtoMapper;
     }
 
     /**

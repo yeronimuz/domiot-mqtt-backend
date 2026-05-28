@@ -2,7 +2,7 @@ package org.domiot.backend.database;
 
 import java.util.Optional;
 
-import org.lankheet.domiot.entities.SensorValueEntity;
+import org.domiot.entities.SensorValueEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

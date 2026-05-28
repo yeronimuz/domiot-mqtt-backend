@@ -2,8 +2,8 @@ package org.domiot.backend.mapper;
 
 import java.util.List;
 
-import org.lankheet.domiot.domotics.dto.DomiotParameterDto;
-import org.lankheet.domiot.entities.DomiotParameterEntity;
+import org.domiot.dto.DomiotParameterDto;
+import org.domiot.entities.DomiotParameterEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

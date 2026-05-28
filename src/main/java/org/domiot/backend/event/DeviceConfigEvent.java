@@ -5,14 +5,15 @@ import java.io.Serializable;
 
 import lombok.Getter;
 
-import org.lankheet.domiot.domotics.dto.DeviceDto;
+import org.domiot.dto.DeviceDto;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
 public class DeviceConfigEvent extends ApplicationEvent implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final DeviceDto device;
+
+    private final transient DeviceDto device;
 
     public DeviceConfigEvent(Object source, DeviceDto device) {
         super(source);
