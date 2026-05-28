@@ -1,10 +1,11 @@
 package org.domiot.backend.service;
 
-import org.springframework.stereotype.Service;
+import java.lang.management.ManagementFactory;
 
 import javax.management.JMException;
 import javax.management.ObjectName;
-import java.lang.management.ManagementFactory;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class GarbageCollectorInfoService {

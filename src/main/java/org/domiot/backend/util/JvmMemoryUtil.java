@@ -1,8 +1,8 @@
 package org.domiot.backend.util;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.time.LocalDateTime;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class JvmMemoryUtil {
